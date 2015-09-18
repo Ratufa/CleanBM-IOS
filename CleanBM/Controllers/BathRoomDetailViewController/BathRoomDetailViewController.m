@@ -224,10 +224,7 @@
             NSLog(@"Successfully retrieved %d scores.", (int)objects.count);
             
             mArrayBathRoomImages = [[NSMutableArray alloc] initWithArray:objects];
-//            if ([mArrayBathRoomImages count] >3) {
-//                [_btnNext setImage:[UIImage imageNamed:@"right_back"] forState:UIControlStateNormal];
-//            }
-//
+
             if([mArrayBathRoomImages count] > 0){
                _lblNoimagesAvailable.hidden = YES;
             }else{
@@ -251,14 +248,6 @@
     
     [query whereKey:@"bathRoomID" equalTo:_bathRoomDetail.objectId];
     
-    //[query orderByDescending:@"likeCount"];
-    
-    //[query whereKey:@"bathLocation" nearGeoPoint:point withinKilometers:10];
-    
-    //[query whereKey:@"createdAt" equalTo:[NSDate date]];
-    
-    //[query orderByDescending:@"likeCount"];
-    
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
         if (!error) {
             // The find succeeded.
@@ -273,7 +262,6 @@
             
             NSMutableArray *tempArray = [[NSMutableArray alloc] initWithArray:objects];
             
-            //float rating = [_bathRoomDetail[@"bathRating"] floatValue];
             float rating = 0.0;
             
             for (PFObject *object in tempArray) {
@@ -332,8 +320,6 @@
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     NSArray *sortedArray;
     sortedArray = [sortArray sortedArrayUsingDescriptors:sortDescriptors];
-    
-    // _arrayOrderStatus = [[dictResponse valueForKey:@"order_array"] mutableCopy];
     
     return [[NSMutableArray alloc] initWithArray:sortedArray];
 }
@@ -783,6 +769,7 @@
 -(void)uploadImagesOnServerWithUserId:(NSString *)userId andBathRoomID:(NSString *)bathroomId withIndex:(NSInteger)index{
     
     __block NSInteger blockInteger = index;
+    
     ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *myasset)
     {
         ALAssetRepresentation *rep = [myasset defaultRepresentation];

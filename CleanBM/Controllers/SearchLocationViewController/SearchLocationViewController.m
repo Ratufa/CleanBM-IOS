@@ -16,12 +16,26 @@
 {
     NSString *searchTextString;
     NSMutableArray *searchArray;
+    NSMutableArray *mArraybathRooms;
 }
 @property (weak, nonatomic) IBOutlet UITextField *txtLocation;
 @property (weak, nonatomic) IBOutlet UITableView *tableViewLocations;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 
+
+//Google place api
+@property NSMutableArray *localSearchQueries;
+@property NSMutableArray *pastSearchWords;
+@property NSMutableArray *pastSearchResults;
+@property NSTimer *autoCompleteTimer;
+@property NSString *substring;
+@property CLLocationManager *locationManager;
+
+
 @end
+
+
+//NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
 
 @implementation SearchLocationViewController
 
@@ -29,6 +43,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     _tableViewLocations.hidden = YES;
+    
+    self.localSearchQueries = [NSMutableArray array];
+    self.pastSearchWords = [NSMutableArray array];
+    self.pastSearchResults = [NSMutableArray array];
 
 }
 
@@ -45,58 +63,198 @@
 #pragma mark--UITABLEVIEW DELEGATE AND DATASOURCE
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return [searchArray count];
+    return [self.localSearchQueries count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    static NSString *strIdentifier = @"searchLocation";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
+//    static NSString *strIdentifier = @"searchLocation";
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
+//    
+//    if(cell == nil){
+//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
+//        
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        cell.contentView.backgroundColor = [UIColor clearColor];
+//    }
+//    
+//    NSMutableDictionary *mDictAddress = [searchArray objectAtIndex:indexPath.row];
+//    
+//    UILabel *lblAddress = (UILabel *)[cell viewWithTag:100];
+//    lblAddress.text = [mDictAddress valueForKey:@"formatted_address"];
+//    
+//    return cell;
     
-    if(cell == nil){
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
-        
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.contentView.backgroundColor = [UIColor clearColor];
-    }
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"searchLocation" forIndexPath:indexPath];
     
-    NSMutableDictionary *mDictAddress = [searchArray objectAtIndex:indexPath.row];
+    NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
     
-    UILabel *lblAddress = (UILabel *)[cell viewWithTag:100];
-    lblAddress.text = [mDictAddress valueForKey:@"formatted_address"];
+    UILabel *lblTitle = (UILabel*)[cell viewWithTag:100];
     
+    lblTitle.text = [searchResult[@"terms"] objectAtIndex:0][@"value"];
+    
+    UILabel *lblDetail = (UILabel*)[cell viewWithTag:200];
+    lblDetail.text = searchResult[@"description"];
     return cell;
+    
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    NSMutableDictionary *mDictAddress = [searchArray objectAtIndex:indexPath.row];
-    CLLocationCoordinate2D annotationCoord;
-    annotationCoord.latitude = [[[[mDictAddress objectForKey:@"geometry"] objectForKey:@"location"] valueForKey:@"lat"] doubleValue];
-    annotationCoord.longitude = [[[[mDictAddress objectForKey:@"geometry"] objectForKey:@"location"] valueForKey:@"lng"] doubleValue];
-    
-    MKCoordinateRegion mapRegion;
-    mapRegion.center.latitude = [[[[mDictAddress objectForKey:@"geometry"] objectForKey:@"location"] valueForKey:@"lat"] doubleValue];
-    mapRegion.center.longitude = [[[[mDictAddress objectForKey:@"geometry"] objectForKey:@"location"] valueForKey:@"lng"] doubleValue];
-    mapRegion.span.latitudeDelta = 0.005;
-    mapRegion.span.longitudeDelta = 0.005;
-    MKCoordinateRegion region = {annotationCoord, mapRegion.span};
-    
-    Annotation *ann = [[Annotation alloc] init];
-     ann.coordinate = annotationCoord;
-    ann.title = [mDictAddress valueForKey:@"formatted_address"];
-    
-     _mapView.delegate = self;
-     //ann.tag = 111;
-    [_mapView addAnnotation:ann];
-    
-    [_mapView setRegion:region animated:YES];
-
-    _txtLocation.text = @"";
     [self.view endEditing:YES];
     
+    _txtLocation.text = @"";
+    
+    NSDictionary *searchResult = [self.localSearchQueries objectAtIndex:indexPath.row];
+    
+    [self getRestaurantsWithLocationName:[searchResult[@"terms"] objectAtIndex:0][@"value"]];
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?reference=%@&sensor=false&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",searchResult[@"reference"]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        NSMutableDictionary *mDict = (NSMutableDictionary *)responseObject;
+        
+        CLLocationCoordinate2D annotationCoord;
+        annotationCoord.latitude = [mDict[@"result"][@"geometry"][@"location"][@"lat"] doubleValue];
+        annotationCoord.longitude = [mDict[@"result"][@"geometry"][@"location"][@"lng"] doubleValue];
+        
+        MKCoordinateRegion mapRegion;
+        mapRegion.center.latitude = [mDict[@"result"][@"geometry"][@"location"][@"lat"] doubleValue];
+        mapRegion.center.longitude = [mDict[@"result"][@"geometry"][@"location"][@"lng"] doubleValue];
+        mapRegion.span.latitudeDelta = 0.05;
+        mapRegion.span.longitudeDelta = 0.05;
+        MKCoordinateRegion region = {annotationCoord, mapRegion.span};
+        
+        _mapView.delegate = self;
+        
+        [_mapView setRegion:region animated:YES];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+
     _tableViewLocations.hidden = YES;
+    
+    mArraybathRooms = [[NSMutableArray alloc]init];
 }
+
+-(void)getRestaurantsWithLocationName:(NSString *)locationName{
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        if([responseObject isKindOfClass:[NSDictionary class]]){
+            NSArray *arrayRestaurant = [responseObject valueForKey:@"results"];
+            
+            
+            NSArray *annotations = [_mapView annotations];
+            
+            for (int j=0; j < [annotations count]; j++) {
+                if ([[annotations objectAtIndex:j] isKindOfClass:[Annotation class]]) {
+                    [_mapView removeAnnotation:[annotations objectAtIndex:j]];
+                }
+            }
+            
+            NSInteger counter = mArraybathRooms.count;
+            
+            for (NSMutableDictionary *mDictRestaurantDetail in arrayRestaurant) {
+                [mArraybathRooms addObject:mDictRestaurantDetail];
+            }
+            
+            while (counter < [mArraybathRooms count]) {
+                
+                NSMutableDictionary *restaurantDetail = [mArraybathRooms objectAtIndex:counter];
+                
+                Annotation *ann = [[Annotation alloc] init];
+                
+                CLLocationCoordinate2D annotationCoord;
+                
+                NSDictionary *bathroomGeoLocation = [[restaurantDetail objectForKey:@"geometry"] objectForKey:@"location"];
+                
+                annotationCoord.latitude = [bathroomGeoLocation[@"lat"] doubleValue];
+                
+                annotationCoord.longitude = [bathroomGeoLocation[@"lng"] doubleValue];
+                
+                ann.locationType = @"restaurant";
+                
+                ann.coordinate = annotationCoord;
+                
+                ann.title = restaurantDetail[@"name"];
+                
+                _mapView.delegate = self;
+                
+                ann.tag = counter;
+                
+                counter++;
+                
+                [_mapView addAnnotation:ann];
+            }
+            
+            //get Hotel's
+           
+            [self getHotelsWithLocationName:locationName];
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+}
+
+#pragma mark -- GET HOTEL'S
+-(void)getHotelsWithLocationName:(NSString *)locationName{
+    
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotel+in+%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"JSON: %@", responseObject);
+        
+        if([responseObject isKindOfClass:[NSDictionary class]]){
+            NSArray *arrayRestaurant = [responseObject valueForKey:@"results"];
+            
+            NSInteger counter = mArraybathRooms.count;
+            
+            for (NSMutableDictionary *mDictRestaurantDetail in arrayRestaurant) {
+                [mArraybathRooms addObject:mDictRestaurantDetail];
+            }
+            
+            while (counter < [mArraybathRooms count]) {
+                
+                NSMutableDictionary *restaurantDetail = [mArraybathRooms objectAtIndex:counter];
+                
+                Annotation *ann = [[Annotation alloc] init];
+                
+                CLLocationCoordinate2D annotationCoord;
+                
+                NSDictionary *bathroomGeoLocation = [[restaurantDetail objectForKey:@"geometry"] objectForKey:@"location"];
+                
+                annotationCoord.latitude = [bathroomGeoLocation[@"lat"] doubleValue];
+                
+                annotationCoord.longitude = [bathroomGeoLocation[@"lng"] doubleValue];
+                
+                ann.locationType = @"hotel";
+                
+                ann.coordinate = annotationCoord;
+                
+                ann.title = restaurantDetail[@"name"];
+                
+                _mapView.delegate = self;
+                
+                ann.tag = counter;
+                
+                counter++;
+                
+                [_mapView addAnnotation:ann];
+            }
+            
+        }
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Error: %@", error);
+    }];
+    
+}
+
 
 #pragma mark - MKMapView Delegate.
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
@@ -115,12 +273,13 @@
         //annotationView.annotation = annotation;
     }
     
-//    if(localAnnotation.tag == 111){
-//        annotationView.image = [UIImage imageNamed:@"current_location_icon"];
-//    }
-//    else
-    {
+    if ([localAnnotation.locationType isEqualToString:@"bathRoom"]) {
         annotationView.image = [UIImage imageNamed:@"small_cleanbm_location_icon"];
+    }else if([localAnnotation.locationType isEqualToString:@"restaurant"]){
+        annotationView.image = [UIImage imageNamed:@"blue_restaurent_icon"];
+    }
+    else{
+        annotationView.image = [UIImage imageNamed:@"blue_hotel_icon"];
     }
     
     UIButton *rightButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
@@ -142,19 +301,7 @@
 }
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view
 {
-    //    Annotation *custAnnotation = view.annotation;
-    //
-    //    if ([custAnnotation.title isEqualToString:@"Current Location"]) {
-    //        return;
-    //    }
-    //
-    //    NSLog(@"Data = %@",[mArraybathRooms objectAtIndex:custAnnotation.tag]);
-    //
-    //    BathRoomDetailViewController *bathRoomDetailViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"bathRoomDetailViewController"];
-    //
-    //    bathRoomDetailViewController.bathRoomDetail = [mArraybathRooms objectAtIndex:custAnnotation.tag];
-    //
-    //    [self.navigationController pushViewController:bathRoomDetailViewController animated:YES];
+    
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -164,10 +311,6 @@
 
 #pragma mark - Search Methods
 
-//- (void)textFieldDidBeginEditing:(UITextField *)textField{
-//    searchTextString = textField.text;
-//    [self updateSearchArray];
-//}
 
 - (void)textFieldDidEndEditing:(UITextField *)textField{
     
@@ -175,14 +318,24 @@
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
     
-    searchTextString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    self.substring = [NSString stringWithString:textField.text];
+    self.substring= [self.substring stringByReplacingOccurrencesOfString:@" " withString:@"+"];
+    self.substring = [self.substring stringByReplacingCharactersInRange:range withString:string];
     
-    if(searchTextString.length != 0){
-        [self updateSearchArray];
-
+    if ([self.substring hasPrefix:@"+"] && self.substring.length >1) {
+        self.substring  = [self.substring substringFromIndex:1];
+        NSLog(@"This string: %@ had a space at the begining.",self.substring);
+    }
+    
+    if (self.substring.length != 0) {
+        
+        _tableViewLocations.hidden = NO;
+        
+        [self runScript];
     }else{
         _tableViewLocations.hidden = YES;
     }
+    
     return YES;
 }
 
@@ -190,6 +343,112 @@
     
     [textField resignFirstResponder];
     return YES;
+}
+
+- (void)runScript{
+    
+    [self.autoCompleteTimer invalidate];
+    self.autoCompleteTimer = [NSTimer scheduledTimerWithTimeInterval:0.65f
+                                                              target:self
+                                                            selector:@selector(searchAutocompleteLocationsWithSubstring:)
+                                                            userInfo:nil
+                                                             repeats:NO];
+}
+
+- (void)searchAutocompleteLocationsWithSubstring:(NSString *)substring
+{
+    [self.localSearchQueries removeAllObjects];
+    [_tableViewLocations reloadData];
+    
+    if (![self.pastSearchWords containsObject:self.substring]) {
+        [self.pastSearchWords addObject:self.substring];
+        NSLog(@"Search: %lu",(unsigned long)self.pastSearchResults.count);
+        [self retrieveGooglePlaceInformation:self.substring withCompletion:^(NSArray * results) {
+            [self.localSearchQueries addObjectsFromArray:results];
+            NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
+            [self.pastSearchResults addObject:searchResult];
+            [_tableViewLocations reloadData];
+            
+        }];
+        
+    }else {
+        
+        for (NSDictionary *pastResult in self.pastSearchResults) {
+            if([[pastResult objectForKey:@"keyword"] isEqualToString:self.substring]){
+                [self.localSearchQueries addObjectsFromArray:[pastResult objectForKey:@"results"]];
+                [_tableViewLocations reloadData];
+            }
+        }
+    }
+    
+}
+
+
+#pragma mark - Google API Requests
+
+-(void)retrieveGooglePlaceInformation:(NSString *)searchWord withCompletion:(void (^)(NSArray *))complete{
+    NSString *searchWordProtection = [searchWord stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    if (searchWordProtection.length != 0) {
+        
+        CLLocation *userLocation = self.locationManager.location;
+        NSString *currentLatitude = @(userLocation.coordinate.latitude).stringValue;
+        NSString *currentLongitude = @(userLocation.coordinate.longitude).stringValue;
+        
+        NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/autocomplete/json?input=%@&types=establishment|geocode&location=%@,%@&radius=500&language=en&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",searchWord,currentLatitude,currentLongitude];
+        NSLog(@"AutoComplete URL: %@",urlString);
+        NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
+        NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+        NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+        NSURLRequest *request = [NSURLRequest requestWithURL:url];
+        NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+            NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+            NSArray *results = [jSONresult valueForKey:@"predictions"];
+            
+            if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"] || [jSONresult[@"status"] isEqualToString:@"REQUEST_DENIED"]){
+                if (!error){
+                    NSDictionary *userInfo = @{@"error":jSONresult[@"status"]};
+                    NSError *newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                    complete(@[@"API Error", newError]);
+                    return;
+                }
+                complete(@[@"Actual Error", error]);
+                return;
+            }else{
+                complete(results);
+            }
+        }];
+        
+        [task resume];
+    }
+    
+}
+
+-(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete {
+    NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",place];
+    NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
+    NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
+    NSURLSession *delegateFreeSession = [NSURLSession sessionWithConfiguration: defaultConfigObject delegate: nil delegateQueue: [NSOperationQueue mainQueue]];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLSessionDataTask *task = [delegateFreeSession dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSDictionary *jSONresult = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
+        NSArray *results = [jSONresult valueForKey:@"result"];
+        
+        if (error || [jSONresult[@"status"] isEqualToString:@"NOT_FOUND"] || [jSONresult[@"status"] isEqualToString:@"REQUEST_DENIED"]){
+            if (!error){
+                NSDictionary *userInfo = @{@"error":jSONresult[@"status"]};
+                NSError *newError = [NSError errorWithDomain:@"API Error" code:666 userInfo:userInfo];
+                complete(@[@"API Error", newError]);
+                return;
+            }
+            complete(@[@"Actual Error", error]);
+            return;
+        }else{
+            complete(results);
+        }
+    }];
+    
+    [task resume];
 }
 
 //update seach method where the textfield acts as seach bar

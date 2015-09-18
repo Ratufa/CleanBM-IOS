@@ -73,6 +73,7 @@
 		8B6D91191B60E064009152B1 /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B6D91131B60E064009152B1 /* FBSDKShareKit.framework */; };
 		8B8762F21B830007004DC81E /* BathRoomDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8762F11B830007004DC81E /* BathRoomDetailViewController.m */; };
 		8B8762F61B833AC5004DC81E /* RatingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8762F51B833AC5004DC81E /* RatingViewController.m */; };
+		8B8B4E971BAC39FE0074FDD5 /* GoogleMobileAds.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8B4E961BAC39FE0074FDD5 /* GoogleMobileAds.framework */; };
 		8B8FE1911B733759005455E1 /* SupportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B8FE1901B733759005455E1 /* SupportViewController.m */; };
 		8B8FE1951B734400005455E1 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8FE1931B734400005455E1 /* Parse.framework */; };
 		8B8FE1961B734400005455E1 /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B8FE1941B734400005455E1 /* ParseFacebookUtilsV4.framework */; };
@@ -224,6 +225,7 @@
 		8B8762F11B830007004DC81E /* BathRoomDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BathRoomDetailViewController.m; sourceTree = "<group>"; };
 		8B8762F41B833AC5004DC81E /* RatingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RatingViewController.h; sourceTree = "<group>"; };
 		8B8762F51B833AC5004DC81E /* RatingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RatingViewController.m; sourceTree = "<group>"; };
+		8B8B4E961BAC39FE0074FDD5 /* GoogleMobileAds.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GoogleMobileAds.framework; sourceTree = "<group>"; };
 		8B8FE18F1B733759005455E1 /* SupportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SupportViewController.h; sourceTree = "<group>"; };
 		8B8FE1901B733759005455E1 /* SupportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SupportViewController.m; sourceTree = "<group>"; };
 		8B8FE1931B734400005455E1 /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 			files = (
 				8B2FDCCD1B70C62300ABB8A5 /* MapKit.framework in Frameworks */,
 				8B36E7941B68FD9300A32A23 /* libz.dylib in Frameworks */,
+				8B8B4E971BAC39FE0074FDD5 /* GoogleMobileAds.framework in Frameworks */,
 				8B8FE1961B734400005455E1 /* ParseFacebookUtilsV4.framework in Frameworks */,
 				8B36E7921B68FD8700A32A23 /* libsqlite3.dylib in Frameworks */,
 				8B36E7901B68FD7600A32A23 /* SystemConfiguration.framework in Frameworks */,
@@ -530,6 +533,14 @@
 			path = RatingViewController;
 			sourceTree = "<group>";
 		};
+		8B8B4E951BAC39EE0074FDD5 /* GoogleAds */ = {
+			isa = PBXGroup;
+			children = (
+				8B8B4E961BAC39FE0074FDD5 /* GoogleMobileAds.framework */,
+			);
+			path = GoogleAds;
+			sourceTree = "<group>";
+		};
 		8B8FE18C1B73372F005455E1 /* AddNewLocationVIewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -671,6 +682,7 @@
 		8B93FE1D1B57CCE9006097F2 /* UtilityClasses */ = {
 			isa = PBXGroup;
 			children = (
+				8B8B4E951BAC39EE0074FDD5 /* GoogleAds */,
 				8B472F4E1B8C95A300253BCF /* ImageUploadLibrary */,
 				8B472F421B8C903C00253BCF /* MHFBImageViewController */,
 				8B9AF5D41B8B1D6F0002226E /* AppIcons */,
@@ -1061,6 +1073,7 @@
 					Framework,
 					"$(PROJECT_DIR)/CleanBM/Frameworks/Parse",
 					Framework,
+					"$(PROJECT_DIR)/CleanBM/UtilityClasses/GoogleAds",
 				);
 				INFOPLIST_FILE = CleanBM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1095,6 +1108,7 @@
 					Framework,
 					"$(PROJECT_DIR)/CleanBM/Frameworks/Parse",
 					Framework,
+					"$(PROJECT_DIR)/CleanBM/UtilityClasses/GoogleAds",
 				);
 				INFOPLIST_FILE = CleanBM/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

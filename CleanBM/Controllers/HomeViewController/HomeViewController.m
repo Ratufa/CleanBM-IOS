@@ -26,8 +26,9 @@
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import <GoogleMobileAds/GADBannerView.h>
 
-@interface HomeViewController ()<REMenuDelegate,UITextFieldDelegate,MKMapViewDelegate,UIAlertViewDelegate>
+@interface HomeViewController ()<REMenuDelegate,UITextFieldDelegate,MKMapViewDelegate,UIAlertViewDelegate,GADBannerViewDelegate>
 {
     BOOL isShown;
     UIView *_cautionView;
@@ -38,6 +39,8 @@
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *viewHeader;
+
+@property (weak, nonatomic) IBOutlet GADBannerView *adBannerView;
 
 @end
 
@@ -50,6 +53,49 @@
     // Do any additional setup after loading the view.
     _mapView.delegate = self;
     _mapView.showsUserLocation = YES;
+}
+
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    //Configure Menu View
+    [self configureMenuView];
+    
+    AppDelegate *appDelegate = [AppDelegate getInstance];
+    
+    if([appDelegate.strRequestFor isEqualToString:@"NearMe"]){
+        
+        [self addMarkersOnMapWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"latitude"] doubleValue] andLongitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"longitude"] doubleValue]];
+        
+        [self getAllBathRoomsWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"latitude"] doubleValue] andLongitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"longitude"] doubleValue]];
+        
+    }else{
+        
+        //[self actionSearchLocation];
+        
+        [self addMarkersOnMapWithLatitude:_latitude andLongitude:_longitude];
+        
+        [self getAllBathRoomsWithLatitude:_latitude andLongitude:_longitude];
+    }
+    
+    //Google Ads
+    
+    _adBannerView.adUnitID = @"ca-app-pub-6582923366746091/1460886964";
+    _adBannerView.rootViewController = self;
+    _adBannerView.delegate = self;
+    GADRequest *request = [GADRequest request];
+    NSString *strId = [[NSUserDefaults standardUserDefaults]valueForKey:@"DeviceId"];
+    
+    request.testDevices = @[strId];
+    [_adBannerView loadRequest:request];
+    
 }
 
 -(void)getRestaurantsWithLocationName:(NSString *)locationName{
@@ -164,35 +210,6 @@
     
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    //Configure Menu View
-    [self configureMenuView];
-    
-    AppDelegate *appDelegate = [AppDelegate getInstance];
-    
-    if([appDelegate.strRequestFor isEqualToString:@"NearMe"]){
-        
-        [self addMarkersOnMapWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"latitude"] doubleValue] andLongitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"longitude"] doubleValue]];
-
-        [self getAllBathRoomsWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"latitude"] doubleValue] andLongitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"longitude"] doubleValue]];
-        
-    }else{
-        
-        //[self actionSearchLocation];
-        
-        [self addMarkersOnMapWithLatitude:_latitude andLongitude:_longitude];
-
-        [self getAllBathRoomsWithLatitude:_latitude andLongitude:_longitude];
-    }
-}
 
 -(void)addMarkersOnMapWithLatitude:(double)latitude andLongitude:(double)longitude{
     
@@ -208,7 +225,6 @@
     MKCoordinateRegion region = {annotationCoord, mapRegion.span};
     [_mapView setRegion:region animated:YES];
 }
-
 
 -(void)configureMenuView{
     
@@ -306,10 +322,6 @@
         logoutItem.tag = 6;
         myAccountItem.tag = 5;
         
-        
-        BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
-        
-        
         _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,myAccountItem ,logoutItem]];
         
     }else{
@@ -348,7 +360,6 @@
         NSLog(@"Menu did close");
     }];
 }
-
 
 #pragma mark--GET BATHROOMS
 -(void)getAllBathRoomsWithLatitude:(double)latitude andLongitude:(double)longitude{
@@ -617,13 +628,6 @@
         annotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationIdentifier];
         //annotationView.annotation = annotation;
     }
-    
-//    if(localAnnotation.tag == 111){
-//        annotationView.image = [UIImage imageNamed:@"current_location_icon"];
-//    }
-//    else{
-//        annotationView.image = [UIImage imageNamed:@"small_cleanbm_location_icon"];
-//    }
     
     if ([localAnnotation.locationType isEqualToString:@"bathRoom"]) {
         annotationView.image = [UIImage imageNamed:@"small_cleanbm_location_icon"];

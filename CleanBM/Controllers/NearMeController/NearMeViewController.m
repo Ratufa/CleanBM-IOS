@@ -404,10 +404,6 @@ NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
     
     [self.view endEditing:YES];
     
-    /*
-     https://maps.googleapis.com/maps/api/place/details/json?reference=CkQ1AAAA5o-S6BCTbKMFBVDwb0gDKKdjQr-h10lrrhnVF4aQNx4CjGZHdx6yWwv71WQh6YBrDDHC-HMvGry6IFHHA75MuxIQa3JPBVI0BVQsYgHXyOQ6DBoUkgCr37Bg50ABZ2qwDKVOqhIJh48&sensor=false&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE
-     */
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?reference=%@&sensor=false&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",strReferenceKey] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);

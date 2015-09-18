@@ -91,6 +91,7 @@
     user.email = _txtEmailAddress.text;
     
     user[@"name"] = _txtName.text;
+    user[@"userProfile"] = @"basic";
 
     [user signUpInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];

@@ -534,7 +534,6 @@
                         else{
                             [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
                         }
-                        
                     } progressBlock:^(int percentDone) {
                         // Update your progress spinner here. percentDone will be between 0 and 100.
                         NSLog(@"Uploading %d",percentDone);

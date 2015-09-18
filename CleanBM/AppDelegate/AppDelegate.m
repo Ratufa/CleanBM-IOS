@@ -47,6 +47,17 @@
     
     _strRootOrLogin = @"RootViewController";
     
+    
+    NSString* uniqueIdentifier = [[[UIDevice currentDevice] identifierForVendor] UUIDString];
+    
+    
+    NSString *devId= [[uniqueIdentifier description]
+                      stringByReplacingOccurrencesOfString:@"-" withString:@""]
+    ;
+    
+    [[NSUserDefaults standardUserDefaults]setObject:devId forKey:@"DeviceId"];
+    
+    
     return YES;
 }
 

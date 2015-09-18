@@ -39,7 +39,6 @@
 
 @implementation ViewController
 
-
 #pragma mark--
 #pragma mark--VIEW LIFE CYCLE
 - (void)viewDidLoad {
@@ -200,6 +199,8 @@
             [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
             if(user != nil){
                 user[@"name"] = userData[@"name"];
+                user[@"userProfile"] = @"basic";
+
                 [user saveInBackground];
             }
             
@@ -239,7 +240,6 @@
     [self.navigationController pushViewController:nearMeViewController animated:YES];
 }
 
-
 #pragma mark
 #pragma mark-- UITEXTFIELD DELEGATE
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -261,6 +261,7 @@
                         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Please enter Email Address." delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
                         alert.tag = 101;
                         [alert show];
+                        
                         return;
                     }
                     if (![StringUtilityClass validateEmail:[alertView textFieldAtIndex:0].text]) {
