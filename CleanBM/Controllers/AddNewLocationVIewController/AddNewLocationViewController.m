@@ -24,7 +24,14 @@
     CGFloat bathroomRating;
     NSString *strBathRoomType;
     NSMutableArray *mArrayUloadPhoto;
+    
+    NSString *strBathRoomBasedOn;
+    
+    PFObject *reviewObject;
+    BOOL isGivenRating;
 }
+
+
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionViewUploadImages;
 
 @property (weak, nonatomic) IBOutlet TPKeyboardAvoidingScrollView *scrollView;
@@ -37,6 +44,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnSit;
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
 
+
+@property (weak, nonatomic) IBOutlet UIImageView *imgMale;
+@property (weak, nonatomic) IBOutlet UIImageView *imgFeMale;
+@property (weak, nonatomic) IBOutlet UIImageView *imgMaleFeMaleBoth;
+
 @end
 
 @implementation AddNewLocationViewController
@@ -47,6 +59,13 @@
     // Do any additional setup after loading the view.
     
     //_ratingView = [[TPFloatRatingView alloc]initWithFrame:CGRectMake(60, 133, 250, 50)];
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
     _ratingView.delegate = self;
     _ratingView.emptySelectedImage = [UIImage imageNamed:@"unselected_rating"];
     _ratingView.fullSelectedImage = [UIImage imageNamed:@"selected_rating"];
@@ -58,33 +77,107 @@
     _ratingView.halfRatings = NO;
     _ratingView.floatRatings = YES;
     
-    //Squat Bathroom
-    [_btnSquat setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
-    [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
-    strBathRoomType = @"Squat";
-    
-    mArrayUloadPhoto = [[NSMutableArray alloc] init];
-    
-   _collectionViewUploadImages.hidden = YES;
-    
-    if([_strRequestFor isEqualToString:@"addLocation"])
-    {
+    if(_requestFor == 1){
         
-        if([[[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"] isEqualToString:@""]){
-            _txtLocationName.text = @"";
-            _txtLocationName.userInteractionEnabled = YES;
+        //Squat Bathroom
+        [_btnSquat setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
+        [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
+        strBathRoomType = @"Squat";
+        
+        mArrayUloadPhoto = [[NSMutableArray alloc] init];
+        
+        _collectionViewUploadImages.hidden = YES;
+        
+        if([_strRequestFor isEqualToString:@"addLocation"])
+        {
+            
+            if([[[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"] isEqualToString:@""]){
+                _txtLocationName.text = @"";
+                _txtLocationName.userInteractionEnabled = YES;
+            }else{
+                _txtLocationName.text = [[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"];
+                _txtLocationName.userInteractionEnabled = NO;
+            }
+            
         }else{
-            _txtLocationName.text = [[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"];
-            _txtLocationName.userInteractionEnabled = NO;
+            _txtLocationName.text = [_mDictRestaurantHotelDetail valueForKey:@"name"];
+            
+            NSDictionary *bathroomGeoLocation = [[_mDictRestaurantHotelDetail objectForKey:@"geometry"] objectForKey:@"location"];
+            
+            [[NSUserDefaults standardUserDefaults]setValue:bathroomGeoLocation[@"lat"] forKey:@"AddLocationLatitude"];
+            [[NSUserDefaults standardUserDefaults]setValue:bathroomGeoLocation[@"lng"] forKey:@"AddLocationLongitude"];
         }
         
-    }else{
-        _txtLocationName.text = [_mDictRestaurantHotelDetail valueForKey:@"name"];
         
-         NSDictionary *bathroomGeoLocation = [[_mDictRestaurantHotelDetail objectForKey:@"geometry"] objectForKey:@"location"];
+        _imgMale.image = [UIImage imageNamed:@"radio_button"];
+        _imgFeMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+        _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"unsel_radio_button"];
         
-        [[NSUserDefaults standardUserDefaults]setValue:bathroomGeoLocation[@"lat"] forKey:@"AddLocationLatitude"];
-        [[NSUserDefaults standardUserDefaults]setValue:bathroomGeoLocation[@"lng"] forKey:@"AddLocationLongitude"];
+        strBathRoomBasedOn = @"Male";
+        
+        isGivenRating = NO;
+        
+    }
+    else{
+        PFUser *currentUser = [PFUser currentUser];
+        if ([_bathRoomDetail[@"genderType"] isEqualToString:@"Male"]) {
+            
+            _imgMale.image = [UIImage imageNamed:@"radio_button"];
+            _imgFeMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+            _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"unsel_radio_button"];
+        }
+        else if([_bathRoomDetail[@"genderType"] isEqualToString:@"Female"]){
+            _imgMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+            _imgFeMale.image = [UIImage imageNamed:@"radio_button"];
+            _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"unsel_radio_button"];
+        }
+        else{
+            _imgMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+            _imgFeMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+            _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"radio_button"];
+        }
+        
+        _txtLocationName.text = _bathRoomDetail[@"bathFullAddress"];
+        
+        if([_bathRoomDetail[@"bathRoomType"] isEqualToString:@"Squat"]){
+            //Squat Bathroom
+            [_btnSquat setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
+            [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
+            strBathRoomType = @"Squat";
+        }else{
+            //Sit Bathroom
+            [_btnSquat setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
+            [_btnSit setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
+            strBathRoomType = @"Sit";
+        }
+
+        for (PFObject *pfObject in _mArrayReviewsList) {
+            
+            if(currentUser){
+                if([currentUser.objectId isEqualToString:pfObject[@"userId"]] && [_strBathRoomId isEqualToString:pfObject[@"bathRoomID"]]){
+                    reviewObject = pfObject;
+                    
+                    isGivenRating = YES;
+                    
+                    _ratingView.rating = [pfObject[@"bathRating"]floatValue];
+                    
+                    if([pfObject[@"bathRoomType"] isEqualToString:@"Squat"]){
+                        //Squat Bathroom
+                        [_btnSquat setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
+                        [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
+                        strBathRoomType = @"Squat";
+                    }else{
+                        //Sit Bathroom
+                        [_btnSquat setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
+                        [_btnSit setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
+                        strBathRoomType = @"Sit";
+                    }
+                    
+                    
+                    _txtViewMessage.text = pfObject[@"MessageReview"];
+                }
+            }
+        }
     }
 }
 
@@ -97,8 +190,14 @@
     return UIStatusBarStyleLightContent;
 }
 
+
 -(IBAction)actionBack:(id)sender{
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma MENU BUTTON
+-(IBAction)actionMenuButton:(id)sender{
+    
 }
 
 #pragma mark RatingView delegate
@@ -198,6 +297,142 @@
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
         // do stuff with the user
+        
+        if(_requestFor == 1){
+           
+            [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
+            
+            PFObject* bathtoomDetail = [PFObject objectWithClassName:@"BathRoomDetail"];
+            
+            bathtoomDetail[@"userId"] = currentUser.objectId;
+            bathtoomDetail[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
+            bathtoomDetail[@"description"] = _txtViewMessage.text;
+            bathtoomDetail[@"bathRoomType"] = strBathRoomType;
+            bathtoomDetail[@"approve"]= @"NO";
+            bathtoomDetail[@"bathFullAddress"] = [[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"];
+            
+            PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"AddLocationLatitude"] doubleValue] longitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"AddLocationLongitude"] doubleValue]];
+            
+            bathtoomDetail[@"bathLocation"] = point;
+            
+            [bathtoomDetail saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (!error) {
+                    NSLog(@"Saved");
+                    
+                    PFObject* bathtoomRating = [PFObject objectWithClassName:@"RattingByUser"];
+                    
+                    bathtoomRating[@"userId"] = currentUser.objectId;
+                    bathtoomRating[@"userName"] = currentUser[@"name"];
+                    bathtoomRating[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
+                    bathtoomRating[@"MessageReview"] = _txtViewMessage.text;
+                    bathtoomRating[@"bathRoomType"] = strBathRoomType;
+                    bathtoomRating[@"bathRoomID"] = [bathtoomDetail objectId];
+                    
+                    [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                        
+                        if(succeeded){
+                            
+                            if([mArrayUloadPhoto count] > 0){
+                                
+                                [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[bathtoomDetail objectId]withIndex:0];
+                            }else{
+                                //BathRoom Added without Image
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Thank you for your Submission" message:@"Your location has been added and awaiting approval from the CleanBM Team.  You will receive a notification once it is approved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                alert.tag = 123;
+                                [alert show];
+                                [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+                            }
+                        }else{
+                            NSString *errorString = [error userInfo][@"error"];
+                            // Show the errorString somewhere and let the user try again.
+                            [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                        }
+                        //[CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+                    }];
+                }
+                else{
+                    // Error
+                    NSLog(@"Error: %@ %@", error, [error userInfo]);
+                    NSString *errorString = [error userInfo][@"error"];
+                    // Show the errorString somewhere and let the user try again.
+                    [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                    [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+                }
+            }];
+            
+        }
+        else{
+            
+            if(isGivenRating){
+                
+                [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
+                PFQuery *query = [PFQuery queryWithClassName:@"RattingByUser"];
+                
+                // Retrieve the object by id
+                [query getObjectInBackgroundWithId:reviewObject.objectId
+                                             block:^(PFObject *review, NSError *error) {
+                                                 // Now let's update it with some new data. In this case, only cheatMode and score
+                                                 review[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
+                                                 review[@"MessageReview"] = _txtViewMessage.text;
+                                                 review[@"bathRoomType"] = strBathRoomType;
+                                                 
+                                                 [review saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                                                     if(succeeded){
+                                                         if([mArrayUloadPhoto count] > 0){
+                                                             
+                                                             [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[_bathRoomDetail objectId]withIndex:0];
+                                                         }else{
+                                                             
+                                                             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your Review submitted successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                                             alert.tag = 999;
+                                                             [alert show];
+                                                             
+                                                         }
+                                                         
+                                                         
+                                                     }else{                                                      NSString *errorString = [error userInfo][@"error"];
+                                                         // Show the errorString somewhere and let the user try again.
+                                                         [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                                                     }
+                                                     [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+                                                 }];
+                                             }];
+            }
+            else{
+                [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
+                
+                PFObject* bathtoomRating = [PFObject objectWithClassName:@"RattingByUser"];
+                bathtoomRating[@"userId"] = currentUser.objectId;
+                bathtoomRating[@"userName"] = currentUser[@"name"];
+                bathtoomRating[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
+                bathtoomRating[@"MessageReview"] = _txtViewMessage.text;
+                bathtoomRating[@"bathRoomType"] = strBathRoomType;
+                bathtoomRating[@"bathRoomID"] = _strBathRoomId;
+                
+                [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    
+                    if(succeeded){
+                        if([mArrayUloadPhoto count] > 0){
+                            
+                            [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[_bathRoomDetail objectId]withIndex:0];
+                        }else{
+                            
+                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your Review submitted successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                            alert.tag = 999;
+                            [alert show];
+                            
+                        }
+                    }else{
+                        NSString *errorString = [error userInfo][@"error"];
+                        // Show the errorString somewhere and let the user try again.
+                        [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                    }
+                    [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+                }];
+            }
+            
+        }
+        
     } else {
         // show the signup or login screen
 
@@ -208,65 +443,7 @@
         return;
     }
     
-    [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
     
-    PFObject* bathtoomDetail = [PFObject objectWithClassName:@"BathRoomDetail"];
-    
-    bathtoomDetail[@"userId"] = currentUser.objectId;
-    bathtoomDetail[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
-    bathtoomDetail[@"description"] = _txtViewMessage.text;
-    bathtoomDetail[@"bathRoomType"] = strBathRoomType;
-    bathtoomDetail[@"approve"]= @"NO";
-    bathtoomDetail[@"bathFullAddress"] = [[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"];
-    
-    PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"AddLocationLatitude"] doubleValue] longitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"AddLocationLongitude"] doubleValue]];
-    
-    bathtoomDetail[@"bathLocation"] = point;
-    
-    [bathtoomDetail saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (!error) {
-            NSLog(@"Saved");
-            
-            PFObject* bathtoomRating = [PFObject objectWithClassName:@"RattingByUser"];
-            
-            bathtoomRating[@"userId"] = currentUser.objectId;
-            bathtoomRating[@"userName"] = currentUser[@"name"];
-            bathtoomRating[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
-            bathtoomRating[@"MessageReview"] = _txtViewMessage.text;
-            bathtoomRating[@"bathRoomType"] = strBathRoomType;
-            bathtoomRating[@"bathRoomID"] = [bathtoomDetail objectId];
-            
-            [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                
-                if(succeeded){
-                    
-                    if([mArrayUloadPhoto count] > 0){
-                        
-                        [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[bathtoomDetail objectId]withIndex:0];
-                }else{
-                        //BathRoom Added without Image
-                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your location is successfully added and waiting for approval!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                        alert.tag = 123;
-                        [alert show];
-                    [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
-                    }
-                }else{
-                    NSString *errorString = [error userInfo][@"error"];
-                    // Show the errorString somewhere and let the user try again.
-                    [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-                }
-                //[CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
-            }];
-        }
-        else{
-            // Error
-            NSLog(@"Error: %@ %@", error, [error userInfo]);
-            NSString *errorString = [error userInfo][@"error"];
-            // Show the errorString somewhere and let the user try again.
-            [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
-            [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
-        }
-    }];
 }
 
 #pragma mark-- UIImagePickerController DELEGATE
@@ -321,8 +498,6 @@
     switch (alertView.tag) {
         case 123:{
                // [self.navigationController popToRootViewControllerAnimated:YES];
-            
-            
             NSMutableArray *allViewControllers = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
             for (UIViewController *aViewController in allViewControllers){
                 if ([aViewController isKindOfClass:[HomeViewController class]]){
@@ -339,6 +514,10 @@
                 
                 [self.navigationController pushViewController:viewController animated:YES];
             }
+        }
+            break;
+        case 999:{
+            [self.navigationController popViewControllerAnimated:YES];
         }
             break;
         default:
@@ -519,9 +698,16 @@
                                         [self uploadImagesOnServerWithUserId:userId andBathRoomID:bathroomId withIndex:blockInteger];
                                     }
                                     else{
-                                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your location is successfully added and waiting for approval!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                        alert.tag = 123;
-                                        [alert show];
+                                        if(_requestFor == 1){
+                                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Thank you for your Submission" message:@"Your location has been added and awaiting approval from the CleanBM Team.  You will receive a notification once it is approved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                            alert.tag = 123;
+                                            [alert show];
+                                        }
+                                        else{
+                                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your Review submitted successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                            alert.tag = 999;
+                                            [alert show];
+                                        }
                                         [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
                                     }
                                 }else{
@@ -555,6 +741,47 @@
     [assetslibrary assetForURL:[mDictUploadImage objectForKey:@"imageURL"]
                        resultBlock:resultblock
                       failureBlock:failureblock];
+}
+
+
+#pragma mark-- BATHROOM BASED ON (MALE/FEMALE/BOTH)
+-(IBAction)actionBathroomBasedFor:(id)sender{
+    
+    if(_requestFor == 1){
+        
+        switch ([sender tag]) {
+            case 111:{
+                //Male
+                _imgMale.image = [UIImage imageNamed:@"radio_button"];
+                _imgFeMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+                _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"unsel_radio_button"];
+                strBathRoomBasedOn = @"Male";
+            }
+                break;
+            case 222:{
+                //Female
+                _imgMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+                _imgFeMale.image = [UIImage imageNamed:@"radio_button"];
+                _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"unsel_radio_button"];
+                strBathRoomBasedOn = @"Female";
+                
+            }
+                break;
+            case 333:{
+                //Male and Female Both
+                
+                _imgMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+                _imgFeMale.image = [UIImage imageNamed:@"unsel_radio_button"];
+                _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"radio_button"];
+                strBathRoomBasedOn = @"Both";
+                
+            }
+                break;
+                
+            default:
+                break;
+        }
+    }
 }
 
 @end

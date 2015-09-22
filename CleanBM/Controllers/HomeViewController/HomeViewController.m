@@ -98,8 +98,8 @@
     
 }
 
+#pragma mark -- GET RESTAURANT'S
 -(void)getRestaurantsWithLocationName:(NSString *)locationName{
-    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
     [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
@@ -201,15 +201,12 @@
                 
                 [_mapView addAnnotation:ann];
             }
-            
         }
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
-    
 }
-
 
 -(void)addMarkersOnMapWithLatitude:(double)latitude andLongitude:(double)longitude{
     
@@ -671,6 +668,8 @@
             AddNewLocationViewController *addNewLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"addNewLocationViewController"];
             addNewLocationViewController.strRequestFor = @"addRestaurant";
             addNewLocationViewController.mDictRestaurantHotelDetail = (NSMutableDictionary *)object;
+            addNewLocationViewController.requestFor = 1;
+
             [self.navigationController pushViewController:addNewLocationViewController animated:YES];
         }
     }
@@ -719,8 +718,7 @@
             if(buttonIndex == 1)
             {
                 [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
-                    if(error == nil)
-                    {
+                    if(error == nil){
                         [self configureMenuView];
                     }
                 }];

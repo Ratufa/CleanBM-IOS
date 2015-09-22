@@ -20,6 +20,7 @@
 #import "ViewController.h"
 #import "UzysAssetsPickerController.h"
 #import "AppDelegate.h"
+#import "AddNewLocationViewController.h"
 
 
 @interface BathRoomDetailViewController ()<UITableViewDataSource,UITableViewDelegate,TPFloatRatingViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,MKMapViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout,UzysAssetsPickerControllerDelegate>
@@ -85,29 +86,34 @@
     }
 }
 
+#pragma MENU BUTTON
+-(IBAction)actionMenuButton:(id)sender{
+    
+}
+
 - (IBAction)actionAddPhoto:(id)sender {
 
-    PFUser *currentUser = [PFUser currentUser];
-    if (currentUser) {
-        // do stuff with the user
-        
-        UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
-        picker.delegate = self;
-        
-        picker.maximumNumberOfSelectionVideo = 0;
-        picker.maximumNumberOfSelectionPhoto = 10;
-        [self presentViewController:picker animated:YES completion:^{
-        }];
-        
-    } else {
-        // show the signup or login screen
-        
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"You are not LoggedIn!" delegate:self cancelButtonTitle:@"Login" otherButtonTitles:@"Cancel", nil];
-        alert.tag = 123;
-        
-        [alert show];
-        return;
-    }
+//    PFUser *currentUser = [PFUser currentUser];
+//    if (currentUser) {
+//        // do stuff with the user
+//        
+//        UzysAssetsPickerController *picker = [[UzysAssetsPickerController alloc] init];
+//        picker.delegate = self;
+//        
+//        picker.maximumNumberOfSelectionVideo = 0;
+//        picker.maximumNumberOfSelectionPhoto = 10;
+//        [self presentViewController:picker animated:YES completion:^{
+//        }];
+//        
+//    } else {
+//        // show the signup or login screen
+//        
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"You are not LoggedIn!" delegate:self cancelButtonTitle:@"Login" otherButtonTitles:@"Cancel", nil];
+//        alert.tag = 123;
+//        
+//        [alert show];
+//        return;
+//    }
 }
 
 #pragma mark--UIImagePickerController DELEGATE
@@ -154,7 +160,9 @@
                     }
                 }];
             }
+            
             [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+            
         } progressBlock:^(int percentDone) {
             // Update your progress spinner here. percentDone will be between 0 and 100.
             NSLog(@"Uploading %d",percentDone);
@@ -171,11 +179,19 @@
     
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
-        RatingViewController *ratingViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ratingViewController"];
-        ratingViewController.strBathRoomId = _bathRoomDetail.objectId;
-        ratingViewController.bathRoomDetail = _bathRoomDetail;
-        ratingViewController.mArrayReviewsList = mArrayBathRoomReviews;
-        [self.navigationController pushViewController:ratingViewController animated:YES];
+//        RatingViewController *ratingViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ratingViewController"];
+//        ratingViewController.strBathRoomId = _bathRoomDetail.objectId;
+//        ratingViewController.bathRoomDetail = _bathRoomDetail;
+//        ratingViewController.mArrayReviewsList = mArrayBathRoomReviews;
+//        [self.navigationController pushViewController:ratingViewController animated:YES];
+        
+        AddNewLocationViewController *addNewLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"addNewLocationViewController"];
+        addNewLocationViewController.requestFor = 2;
+        addNewLocationViewController.mArrayReviewsList = mArrayBathRoomReviews;
+        addNewLocationViewController.strBathRoomId = _bathRoomDetail.objectId;
+        addNewLocationViewController.bathRoomDetail = _bathRoomDetail;
+        [self.navigationController pushViewController:addNewLocationViewController animated:YES];
+        
     }else {
         // show the signup or login screen
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"You are not LoggedIn!" delegate:self cancelButtonTitle:@"Login" otherButtonTitles:@"Cancel", nil];

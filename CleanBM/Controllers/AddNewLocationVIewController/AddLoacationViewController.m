@@ -9,6 +9,14 @@
 #import "AddLoacationViewController.h"
 #import <MapKit/MapKit.h>
 #import "AddNewLocationViewController.h"
+#import <Parse/Parse.h>
+#import "HomeViewController.h"
+#import "NearMeViewController.h"
+#import "SearchLocationViewController.h"
+#import "ViewController.h"
+#import "MyAccountViewController.h"
+#import "AppDelegate.h"
+#import "SupportViewController.h"
 
 @interface AddLoacationViewController ()<MKMapViewDelegate>{
     
@@ -45,9 +53,235 @@
 - (IBAction)actionAddThisLocation:(id)sender {
     AddNewLocationViewController *addNewLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"addNewLocationViewController"];
     addNewLocationViewController.strRequestFor = @"addLocation";
-    
+    addNewLocationViewController.requestFor = 1;
     [self.navigationController pushViewController:addNewLocationViewController animated:YES];
 }
+
+#pragma MENU BUTTON
+-(IBAction)actionMenuButton:(id)sender{
+    
+    [self menuButton];
+}
+
+- (void) menuButton{
+    if (self.menu.isOpen)
+        return [self.menu close];
+    
+    [self.menu showFromNavigationController:self.navigationController];
+}
+
+-(void)configureMenuView{
+    // do stuff with the user
+    REMenuItem *loginSignUpItem = [[REMenuItem alloc] initWithTitle:@"Home"
+                                                           subtitle:@""
+                                                              image:[UIImage imageNamed:@"home_icon"]
+                                                   highlightedImage:nil
+                                                             action:^(REMenuItem *item) {
+                                                                 NSLog(@"Item: %@", item);
+                                                                 
+                                                                 [self performSelector:@selector(actionNearMe:) withObject:nil afterDelay:0.3];
+                                                             }];
+    
+    
+    REMenuItem *searchNearMeItem = [[REMenuItem alloc] initWithTitle:@"Search Near Me"
+                                                            subtitle:@""
+                                                               image:[UIImage imageNamed:@"location_icon"]
+                                                    highlightedImage:nil
+                                                              action:^(REMenuItem *item) {
+                                                                  NSLog(@"Item: %@", item);
+                                                                  
+                                                                  [self performSelector:@selector(actionHomePage:) withObject:nil afterDelay:0.3];
+                                                                  
+                                                              }];
+    
+    REMenuItem *searchLocationItem = [[REMenuItem alloc] initWithTitle:@"Search Location"
+                                                              subtitle:@""
+                                                                 image:[UIImage imageNamed:@"search_icon"]
+                                                      highlightedImage:nil
+                                                                action:^(REMenuItem *item) {
+                                                                    NSLog(@"Item: %@", item);
+                                                                    
+                                                                    [self performSelector:@selector(actionSearchNearMe:) withObject:nil afterDelay:0.3];
+                                                                }];
+    REMenuItem *addNewLocationItem = [[REMenuItem alloc] initWithTitle:@"Add New Location"
+                                                                 image:[UIImage imageNamed:@"add_bathroom_icon"]
+                                                      highlightedImage:nil
+                                                                action:^(REMenuItem *item) {
+                                                                    NSLog(@"Item: %@", item);
+                                                                  
+                                                                }];
+    
+    REMenuItem *supportItem = [[REMenuItem alloc] initWithTitle:@"Support"
+                                                          image:[UIImage imageNamed:@"support_icon"]
+                                               highlightedImage:nil
+                                                         action:^(REMenuItem *item) {
+                                                             NSLog(@"Item: %@", item);
+                                                             
+                                                              [self performSelector:@selector(actionSupportCleanBM:) withObject:nil afterDelay:0.3];
+                                                         }];
+    
+    REMenuItem *logoutItem = [[REMenuItem alloc] initWithTitle:@"Login/Sign Up"
+                                                      subtitle:@""
+                                                         image:[UIImage imageNamed:@"login_icon"]
+                                              highlightedImage:nil
+                                                        action:^(REMenuItem *item) {
+                                                            NSLog(@"Item: %@", item);
+                                                            
+                                                            [self performSelector:@selector(actionLoginSignUp:) withObject:nil afterDelay:0.3];
+                                                        }];
+    
+    REMenuItem *myAccountItem =[[REMenuItem alloc] initWithTitle:@"My Account"
+                                                        subtitle:@""
+                                                           image:[UIImage imageNamed:@"login_icon"]
+                                                highlightedImage:nil
+                                                          action:^(REMenuItem *item) {
+                                                              NSLog(@"Item: %@", item);
+                                                              
+                                                              [self performSelector:@selector(actionMyAccount:) withObject:nil afterDelay:0.3];
+                                                          }];
+    
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (currentUser) {
+        // do stuff with the user
+        
+        logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
+                                              subtitle:@""
+                                                 image:[UIImage imageNamed:@"sing_out_button"]
+                                      highlightedImage:nil
+                                                action:^(REMenuItem *item) {
+                                                    NSLog(@"Item: %@", item);
+                                                    
+                                                    [self performSelector:@selector(actionLogout:) withObject:nil afterDelay:0.1];
+                                                }];
+        
+        loginSignUpItem.tag = 0;
+        searchNearMeItem.tag = 1;
+        searchLocationItem.tag = 2;
+        addNewLocationItem.tag = 3;
+        supportItem.tag = 4;
+        logoutItem.tag = 6;
+        myAccountItem.tag = 5;
+        
+        _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,myAccountItem ,logoutItem]];
+        
+    }else{
+        loginSignUpItem.tag = 0;
+        searchNearMeItem.tag = 1;
+        searchLocationItem.tag = 2;
+        addNewLocationItem.tag = 3;
+        supportItem.tag = 4;
+        logoutItem.tag = 5;
+        _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,logoutItem]];
+    }
+    
+    if (!REUIKitIsFlatMode()) {
+        self.menu.cornerRadius = 4;
+        self.menu.shadowRadius = 4;
+        self.menu.shadowColor = [UIColor blackColor];
+        self.menu.shadowOffset = CGSizeMake(0, 1);
+        self.menu.shadowOpacity = 1;
+    }
+    
+    self.menu.separatorOffset = CGSizeMake(15.0, 0.0);
+    self.menu.imageOffset = CGSizeMake(5, -1);
+    self.menu.waitUntilAnimationIsComplete = NO;
+    self.menu.badgeLabelConfigurationBlock = ^(UILabel *badgeLabel, REMenuItem *item) {
+        badgeLabel.backgroundColor = [UIColor colorWithRed:0 green:179/255.0 blue:134/255.0 alpha:1];
+        badgeLabel.layer.borderColor = [UIColor colorWithRed:0.000 green:0.648 blue:0.507 alpha:1.000].CGColor;
+    };
+    
+    self.menu.delegate = self;
+    
+    [self.menu setClosePreparationBlock:^{
+        NSLog(@"Menu will close");
+    }];
+    
+    [self.menu setCloseCompletionHandler:^{
+        NSLog(@"Menu did close");
+    }];
+}
+
+-(IBAction)actionHomePage:(id)sender{
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[HomeViewController class]])
+        {
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+}
+
+#pragma ACTION LOGIN SIGNUP AFTER DELAY
+-(IBAction)actionLoginSignUp:(id)sender{
+    ViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"viewController"];
+    
+    AppDelegate *appDelegate = [AppDelegate getInstance];
+    appDelegate.strRootOrLogin = @"LoginViewController";
+    
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+#pragma ACTION SUPPORT CLEANBM AFTER DELAY
+-(IBAction)actionSupportCleanBM:(id)sender{
+    SupportViewController *supportViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"supportViewController"];
+    [self.navigationController pushViewController:supportViewController animated:YES];
+}
+-(IBAction)actionNearMe:(id)sender{
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[NearMeViewController class]])
+        {
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+}
+
+
+-(IBAction)actionLogout:(id)sender{
+    
+    NSLog(@"Logout");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Do you want to logout?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Logout", nil ];
+    
+    alert.tag = 123;
+    [alert show];
+}
+
+#pragma ACTION SEARCH NEAR ME AFTER DELAY
+-(IBAction)actionSearchNearMe:(id)sender{
+    SearchLocationViewController *searchLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"searchLocationViewController"];
+    [self.navigationController pushViewController:searchLocationViewController animated:YES];
+}
+
+-(IBAction)actionMyAccount:(id)sender{
+    MyAccountViewController *myAccountViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"myAccountViewController"];
+    [self.navigationController pushViewController:myAccountViewController animated:YES];
+}
+
+
+#pragma mark - REMenu Delegate Methods
+-(void)willOpenMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
+-(void)didOpenMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
+-(void)willCloseMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
+-(void)didCloseMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
 
 #pragma mark-- MAPVIEW DELEGATE
 

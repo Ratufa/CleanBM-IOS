@@ -60,6 +60,11 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma MENU BUTTON
+-(IBAction)actionMenuButton:(id)sender{
+    
+}
+
 #pragma mark--UITABLEVIEW DELEGATE AND DATASOURCE
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -67,23 +72,6 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-//    static NSString *strIdentifier = @"searchLocation";
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:strIdentifier];
-//    
-//    if(cell == nil){
-//        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:strIdentifier];
-//        
-//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        cell.contentView.backgroundColor = [UIColor clearColor];
-//    }
-//    
-//    NSMutableDictionary *mDictAddress = [searchArray objectAtIndex:indexPath.row];
-//    
-//    UILabel *lblAddress = (UILabel *)[cell viewWithTag:100];
-//    lblAddress.text = [mDictAddress valueForKey:@"formatted_address"];
-//    
-//    return cell;
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"searchLocation" forIndexPath:indexPath];
     
