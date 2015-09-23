@@ -62,6 +62,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    _collectionViewUploadImages.hidden = YES;
+    mArrayUloadPhoto = [[NSMutableArray alloc] init];
+
+    
     [self configureMenuView];
 }
 
@@ -87,9 +91,6 @@
         [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
         strBathRoomType = @"Squat";
         
-        mArrayUloadPhoto = [[NSMutableArray alloc] init];
-        
-        _collectionViewUploadImages.hidden = YES;
         
         if([_strRequestFor isEqualToString:@"addLocation"])
         {
@@ -303,7 +304,10 @@
             
             PFObject* bathtoomDetail = [PFObject objectWithClassName:@"BathRoomDetail"];
             
+            bathtoomDetail[@"userInfo"] = currentUser;;
+            
             bathtoomDetail[@"userId"] = currentUser.objectId;
+            
             bathtoomDetail[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
             bathtoomDetail[@"description"] = _txtViewMessage.text;
             bathtoomDetail[@"bathRoomType"] = strBathRoomType;
@@ -321,11 +325,13 @@
                     PFObject* bathtoomRating = [PFObject objectWithClassName:@"RattingByUser"];
                     
                     bathtoomRating[@"userId"] = currentUser.objectId;
+                    bathtoomRating[@"userInfo"] = currentUser;
                     bathtoomRating[@"userName"] = currentUser[@"name"];
                     bathtoomRating[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
                     bathtoomRating[@"MessageReview"] = _txtViewMessage.text;
                     bathtoomRating[@"bathRoomType"] = strBathRoomType;
                     bathtoomRating[@"bathRoomID"] = [bathtoomDetail objectId];
+                    bathtoomRating[@"bathInfo"] = bathtoomDetail;
                     
                     [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                         
@@ -333,7 +339,7 @@
                             
                             if([mArrayUloadPhoto count] > 0){
                                 
-                                [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[bathtoomDetail objectId]withIndex:0];
+                                [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[bathtoomDetail objectId]withIndex:0 withBathDetail:bathtoomDetail];
                             }else{
                                 //BathRoom Added without Image
                                 UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Thank you for your Submission" message:@"Your location has been added and awaiting approval from the CleanBM Team.  You will receive a notification once it is approved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -379,7 +385,7 @@
                                                      if(succeeded){
                                                          if([mArrayUloadPhoto count] > 0){
                                                              
-                                                             [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[_bathRoomDetail objectId]withIndex:0];
+                                                             [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[_bathRoomDetail objectId]withIndex:0 withBathDetail:_bathRoomDetail];
                                                          }else{
                                                              
                                                              UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your Review submitted successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -402,18 +408,20 @@
                 
                 PFObject* bathtoomRating = [PFObject objectWithClassName:@"RattingByUser"];
                 bathtoomRating[@"userId"] = currentUser.objectId;
+                bathtoomRating[@"userInfo"] = currentUser;
                 bathtoomRating[@"userName"] = currentUser[@"name"];
                 bathtoomRating[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
                 bathtoomRating[@"MessageReview"] = _txtViewMessage.text;
                 bathtoomRating[@"bathRoomType"] = strBathRoomType;
                 bathtoomRating[@"bathRoomID"] = _strBathRoomId;
-                
+                bathtoomRating[@"bathInfo"] = _bathRoomDetail;
+
                 [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                     
                     if(succeeded){
                         if([mArrayUloadPhoto count] > 0){
                             
-                            [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[_bathRoomDetail objectId]withIndex:0];
+                            [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[_bathRoomDetail objectId]withIndex:0 withBathDetail:_bathRoomDetail];
                         }else{
                             
                             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your Review submitted successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -517,6 +525,17 @@
             break;
         case 999:{
             [self.navigationController popViewControllerAnimated:YES];
+        }
+            break;
+        case 333:{
+            if(buttonIndex == 1){
+                //Logout
+                [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
+                    if(error == nil){
+                        [self configureMenuView];
+                    }
+                }];
+            }
         }
             break;
         default:
@@ -661,7 +680,7 @@
     }
 }
 
--(void)uploadImagesOnServerWithUserId:(NSString *)userId andBathRoomID:(NSString *)bathroomId withIndex:(NSInteger)index{
+-(void)uploadImagesOnServerWithUserId:(NSString *)userId andBathRoomID:(NSString *)bathroomId withIndex:(NSInteger)index withBathDetail:(PFObject *)bathInfo{
  
     __block NSInteger blockInteger = index;
     ALAssetsLibraryAssetForURLResultBlock resultblock = ^(ALAsset *myasset)
@@ -684,6 +703,8 @@
                             // The image has now been uploaded to Parse. Associate it with a new object
                             PFObject* bathtoomImage = [PFObject objectWithClassName:@"BathroomImages"];
                             [bathtoomImage setObject:file forKey:@"bathroomImage"];
+                            PFUser *currentUser = [PFUser currentUser];
+                            bathtoomImage[@"userInfo"] = currentUser;
                             bathtoomImage[@"userId"] = userId;
                             bathtoomImage[@"bathroomID"] = bathroomId;
                             bathtoomImage[@"approve"]= @"NO";
@@ -694,7 +715,7 @@
                                     if(blockInteger < [mArrayUloadPhoto count]-1)
                                     {
                                         blockInteger++;
-                                        [self uploadImagesOnServerWithUserId:userId andBathRoomID:bathroomId withIndex:blockInteger];
+                                        [self uploadImagesOnServerWithUserId:userId andBathRoomID:bathroomId withIndex:blockInteger withBathDetail:bathInfo];
                                     }
                                     else{
                                         if(_requestFor == 1){
@@ -990,7 +1011,7 @@
     NSLog(@"Logout");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Do you want to logout?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Logout", nil ];
     
-    alert.tag = 123;
+    alert.tag = 333;
     [alert show];
 }
 

@@ -19,7 +19,7 @@
 #import "SupportViewController.h"
 #import "AppDelegate.h"
 
-@interface SearchLocationViewController ()<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate,REMenuDelegate>
+@interface SearchLocationViewController ()<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate,REMenuDelegate,UIAlertViewDelegate>
 {
     NSString *searchTextString;
     NSMutableArray *searchArray;
@@ -272,7 +272,7 @@
     NSLog(@"Logout");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Do you want to logout?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Logout", nil ];
     
-    alert.tag = 123;
+    alert.tag = 333;
     [alert show];
 }
 
@@ -760,8 +760,28 @@
             NSLog(@"Error: %@", error);
         }];
     }
-    
 }
+
+
+#pragma mark-- UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (alertView.tag) {
+        case 333:{
+            if(buttonIndex == 1){
+                //Logout
+                [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
+                    if(error == nil){
+                        [self configureMenuView];
+                    }
+                }];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+
 
 
 @end

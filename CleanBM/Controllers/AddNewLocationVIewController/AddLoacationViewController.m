@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 #import "SupportViewController.h"
 
-@interface AddLoacationViewController ()<MKMapViewDelegate,REMenuDelegate>{
+@interface AddLoacationViewController ()<MKMapViewDelegate,REMenuDelegate,UIAlertViewDelegate>{
     
 }
 
@@ -287,7 +287,7 @@
     NSLog(@"Logout");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Do you want to logout?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Logout", nil ];
     
-    alert.tag = 123;
+    alert.tag = 333;
     [alert show];
 }
 
@@ -457,6 +457,26 @@ float MilesToMeters(float miles){
 #pragma mark -- METERS TO MILES
 float MetersToMiles(float meters){
     return meters / 1609.344f;
+}
+
+
+#pragma mark-- UIAlertView Delegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    switch (alertView.tag) {
+        case 333:{
+            if(buttonIndex == 1){
+                //Logout
+                [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
+                    if(error == nil){
+                        [self configureMenuView];
+                    }
+                }];
+            }
+        }
+            break;
+        default:
+            break;
+    }
 }
 
 @end

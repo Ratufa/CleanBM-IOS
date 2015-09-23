@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464696108.445512"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "291"
-            endingLineNumber = "291"
+            startingLineNumber = "292"
+            endingLineNumber = "292"
             landmarkName = "-actionAddLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464698622.747654"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "442"
-            endingLineNumber = "442"
+            startingLineNumber = "450"
+            endingLineNumber = "450"
             landmarkName = "-actionAddLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "615"
-            endingLineNumber = "615"
+            startingLineNumber = "634"
+            endingLineNumber = "634"
             landmarkName = "-handleLongPress:"
             landmarkType = "5">
          </BreakpointContent>
@@ -106,27 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "607"
-            endingLineNumber = "607"
-            landmarkName = "-collectionView:cellForItemAtIndexPath:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "627"
-            endingLineNumber = "627"
+            startingLineNumber = "646"
+            endingLineNumber = "646"
             landmarkName = "-handleLongPress:"
             landmarkType = "5">
          </BreakpointContent>
@@ -138,11 +122,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "403"
-            endingLineNumber = "403"
+            startingLineNumber = "408"
+            endingLineNumber = "408"
             landmarkName = "-mapView:didSelectAnnotationView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -154,11 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "417"
-            endingLineNumber = "417"
+            startingLineNumber = "422"
+            endingLineNumber = "422"
             landmarkName = "-mapView:didDeselectAnnotationView:"
             landmarkType = "5">
          </BreakpointContent>
@@ -170,57 +154,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "489"
-            endingLineNumber = "489"
-            landmarkName = "-tableView:editActionsForRowAtIndexPath:"
-            landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__71-[BathRoomDetailViewController tableView:editActionsForRowAtIndexPath:]_block_invoke"
-                  moduleName = "CleanBM"
-                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-                  timestampString = "464685821.554521"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "491"
-                  endingLineNumber = "491"
-                  offsetFromSymbolStart = "763">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "__71-[BathRoomDetailViewController tableView:editActionsForRowAtIndexPath:]_block_invoke_2"
-                  moduleName = "CleanBM"
-                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-                  timestampString = "464685821.554734"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "491"
-                  endingLineNumber = "491"
-                  offsetFromSymbolStart = "86">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "515"
-            endingLineNumber = "515"
+            startingLineNumber = "520"
+            endingLineNumber = "520"
             landmarkName = "-tableView:editActionsForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -232,11 +170,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "496"
-            endingLineNumber = "496"
+            startingLineNumber = "501"
+            endingLineNumber = "501"
             landmarkName = "-tableView:editActionsForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -248,11 +186,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "530"
-            endingLineNumber = "530"
+            startingLineNumber = "535"
+            endingLineNumber = "535"
             landmarkName = "-tableView:editActionsForRowAtIndexPath:"
             landmarkType = "5">
             <Locations>
@@ -263,7 +201,7 @@
                   symbolName = "__71-[BathRoomDetailViewController tableView:editActionsForRowAtIndexPath:]_block_invoke_3"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-                  timestampString = "464685821.566586"
+                  timestampString = "464698623.527667"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "530"
@@ -277,7 +215,7 @@
                   symbolName = "__71-[BathRoomDetailViewController tableView:editActionsForRowAtIndexPath:]_block_invoke_4"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-                  timestampString = "464685821.566811"
+                  timestampString = "464698623.527917"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "530"
@@ -294,11 +232,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "553"
-            endingLineNumber = "553"
+            startingLineNumber = "558"
+            endingLineNumber = "558"
             landmarkName = "-tableView:editActionsForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -342,11 +280,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "916"
-            endingLineNumber = "916"
+            startingLineNumber = "940"
+            endingLineNumber = "940"
             landmarkName = "-actionPreviousButtonPressed:"
             landmarkType = "5">
          </BreakpointContent>
@@ -358,27 +296,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "909"
-            endingLineNumber = "909"
-            landmarkName = "-actionPreviousButtonPressed:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "943"
-            endingLineNumber = "943"
+            startingLineNumber = "974"
+            endingLineNumber = "974"
             landmarkName = "-actionNextButtonPressed:"
             landmarkType = "5">
          </BreakpointContent>
@@ -390,11 +312,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "945"
-            endingLineNumber = "945"
+            startingLineNumber = "976"
+            endingLineNumber = "976"
             landmarkName = "-actionNextButtonPressed:"
             landmarkType = "5">
          </BreakpointContent>
@@ -406,11 +328,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "947"
-            endingLineNumber = "947"
+            startingLineNumber = "978"
+            endingLineNumber = "978"
             landmarkName = "-actionNextButtonPressed:"
             landmarkType = "5">
          </BreakpointContent>
@@ -422,27 +344,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "957"
-            endingLineNumber = "957"
-            landmarkName = "-actionNextButtonPressed:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "738"
-            endingLineNumber = "738"
+            startingLineNumber = "755"
+            endingLineNumber = "755"
             landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -454,11 +360,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "826"
-            endingLineNumber = "826"
+            startingLineNumber = "857"
+            endingLineNumber = "857"
             landmarkName = "-uploadImagesOnServerWithUserId:andBathRoomID:withIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -470,11 +376,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "836"
-            endingLineNumber = "836"
+            startingLineNumber = "867"
+            endingLineNumber = "867"
             landmarkName = "-uploadImagesOnServerWithUserId:andBathRoomID:withIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -486,11 +392,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "164"
-            endingLineNumber = "164"
+            startingLineNumber = "169"
+            endingLineNumber = "169"
             landmarkName = "-imagePickerController:didFinishPickingMediaWithInfo:"
             landmarkType = "5">
          </BreakpointContent>
@@ -502,11 +408,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "539"
-            endingLineNumber = "539"
+            startingLineNumber = "544"
+            endingLineNumber = "544"
             landmarkName = "-tableView:editActionsForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -518,11 +424,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "884"
-            endingLineNumber = "884"
+            startingLineNumber = "915"
+            endingLineNumber = "915"
             landmarkName = "-uzysAssetsPickerControllerDidExceedMaximumNumberOfSelection:"
             landmarkType = "5">
          </BreakpointContent>
@@ -534,11 +440,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "270"
-            endingLineNumber = "270"
+            startingLineNumber = "275"
+            endingLineNumber = "275"
             landmarkName = "-getReviewList"
             landmarkType = "5">
          </BreakpointContent>
@@ -550,11 +456,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "292"
-            endingLineNumber = "292"
+            startingLineNumber = "297"
+            endingLineNumber = "297"
             landmarkName = "-getReviewList"
             landmarkType = "5">
          </BreakpointContent>
@@ -566,11 +472,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "240"
-            endingLineNumber = "240"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
             landmarkName = "-getBathRoomImages"
             landmarkType = "5">
          </BreakpointContent>
@@ -582,11 +488,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "599"
-            endingLineNumber = "599"
+            startingLineNumber = "604"
+            endingLineNumber = "604"
             landmarkName = "-collectionView:cellForItemAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -661,7 +567,7 @@
                   symbolName = "__30-[ViewController actionLogin:]_block_invoke"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/SigninSignUpViewController/ViewController.m"
-                  timestampString = "464685821.633964"
+                  timestampString = "464698623.59451"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "129"
@@ -675,7 +581,7 @@
                   symbolName = "__30-[ViewController actionLogin:]_block_invoke_2"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/SigninSignUpViewController/ViewController.m"
-                  timestampString = "464685821.634242"
+                  timestampString = "464698623.59476"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "129"
@@ -724,11 +630,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "285"
-            endingLineNumber = "285"
+            startingLineNumber = "290"
+            endingLineNumber = "290"
             landmarkName = "-getReviewList"
             landmarkType = "5">
          </BreakpointContent>
@@ -740,11 +646,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "289"
-            endingLineNumber = "289"
+            startingLineNumber = "294"
+            endingLineNumber = "294"
             landmarkName = "-getReviewList"
             landmarkType = "5">
          </BreakpointContent>
@@ -756,11 +662,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddLoacationViewController.m"
-            timestampString = "464690286.971426"
+            timestampString = "464693674.982351"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "436"
-            endingLineNumber = "436"
+            startingLineNumber = "430"
+            endingLineNumber = "430"
             landmarkName = "-getLocationFromAddressString:"
             landmarkType = "5">
          </BreakpointContent>
@@ -810,54 +716,6 @@
             startingLineNumber = "189"
             endingLineNumber = "189"
             landmarkName = "-getRestaurantsWithLocationName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464689779.496357"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "726"
-            endingLineNumber = "726"
-            landmarkName = "-eventDetail:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464689779.496357"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "724"
-            endingLineNumber = "724"
-            landmarkName = "-eventDetail:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464689779.496357"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "738"
-            endingLineNumber = "738"
-            landmarkName = "-eventDetail:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1028,11 +886,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464698622.747654"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "510"
-            endingLineNumber = "510"
+            startingLineNumber = "518"
+            endingLineNumber = "518"
             landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1044,11 +902,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-            timestampString = "464618269.849863"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "758"
-            endingLineNumber = "758"
+            startingLineNumber = "775"
+            endingLineNumber = "775"
             landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1060,11 +918,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464265404.666886"
+            timestampString = "464700894.254021"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "495"
-            endingLineNumber = "495"
+            startingLineNumber = "494"
+            endingLineNumber = "494"
             landmarkName = "-actionLoginSignUp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1139,86 +997,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464681771.548963"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
-            landmarkName = "-getHotelsWithLocationName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464681771.548963"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "108"
-            endingLineNumber = "108"
-            landmarkName = "-getRestaurantsWithLocationName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464681771.548963"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "-getRestaurantsWithLocationName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464681771.548963"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
-            landmarkName = "-getRestaurantsWithLocationName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/HomeViewController/HomeViewController.m"
-            timestampString = "464681771.548963"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "-getRestaurantsWithLocationName:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
             timestampString = "464265404.666886"
             startingColumnNumber = "9223372036854775807"
@@ -1252,11 +1030,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464696108.445512"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "216"
-            endingLineNumber = "216"
+            startingLineNumber = "217"
+            endingLineNumber = "217"
             landmarkName = "-actionTakePhoto:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1268,11 +1046,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464696180.598416"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "86"
-            endingLineNumber = "86"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "-viewWillAppear:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1284,11 +1062,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464690673.273592"
+            timestampString = "464696108.445512"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "281"
-            endingLineNumber = "281"
+            startingLineNumber = "282"
+            endingLineNumber = "282"
             landmarkName = "-actionAddLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1300,12 +1078,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/SearchLocationViewController/SearchLocationViewController.m"
-            timestampString = "464684606.52834"
+            timestampString = "464693674.982351"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "250"
-            endingLineNumber = "250"
+            startingLineNumber = "249"
+            endingLineNumber = "249"
             landmarkName = "-actionNearMe:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
+            timestampString = "464696108.445512"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
+            landmarkName = "-actionAddLocation:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
+            timestampString = "464700894.254021"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "681"
+            endingLineNumber = "681"
+            landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

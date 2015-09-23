@@ -489,7 +489,6 @@ NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
     }
 }
 
-
 #pragma ACTION LOGIN SIGNUP AFTER DELAY
 -(IBAction)actionLoginSignUp:(id)sender{
     ViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"viewController"];
@@ -528,7 +527,6 @@ NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
 }
 
 -(IBAction)actionMyAccount:(id)sender{
-    
     MyAccountViewController *myAccountViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"myAccountViewController"];
     
     [self.navigationController pushViewController:myAccountViewController animated:YES];

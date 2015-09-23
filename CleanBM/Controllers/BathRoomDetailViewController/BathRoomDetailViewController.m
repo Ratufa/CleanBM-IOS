@@ -21,9 +21,16 @@
 #import "UzysAssetsPickerController.h"
 #import "AppDelegate.h"
 #import "AddNewLocationViewController.h"
+#import "ViewController.h"
+#import "HomeViewController.h"
+#import "NearMeViewController.h"
+#import "SearchLocationViewController.h"
+#import "MyAccountViewController.h"
+#import "SupportViewController.h"
+#import "AddLoacationViewController.h"
 
 
-@interface BathRoomDetailViewController ()<UITableViewDataSource,UITableViewDelegate,TPFloatRatingViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,MKMapViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout,UzysAssetsPickerControllerDelegate>
+@interface BathRoomDetailViewController ()<UITableViewDataSource,UITableViewDelegate,TPFloatRatingViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,MKMapViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout,UzysAssetsPickerControllerDelegate,REMenuDelegate>
 {
     NSMutableArray *mArrayBathRoomImages;
     NSMutableArray *mArrayBathRoomReviews;
@@ -84,10 +91,8 @@
     if(!isPhotoUplaoding){
         [self getReviewList];
     }
-}
-
-#pragma MENU BUTTON
--(IBAction)actionMenuButton:(id)sender{
+    
+    [self configureMenuView];
     
 }
 
@@ -487,7 +492,6 @@
                                              PFQuery *mainQuery = [PFQuery orQueryWithSubqueries:@[query,query2]];
                                             
                                             
-                                            
                                             [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                                                 NSLog(@"Data =%@",objects);
                                                 
@@ -504,9 +508,7 @@
                                                     }
                                                     
                                                 }
-                                                
                                                
-                                                
                                                 if(error == nil){
                                                     
                                                     PFObject* bathtoomRating = [PFObject objectWithClassName:@"LikeReview"];
@@ -516,6 +518,10 @@
                                                     bathtoomRating[@"likeCount"] = [NSNumber numberWithInt:1];
                                                     bathtoomRating[@"reviewUserId"] = objectReview[@"userId"];
                                                     bathtoomRating[@"bathroomId"] = [_bathRoomDetail objectId];
+                                                    
+                                                    bathtoomRating[@"bathInfo"] = _bathRoomDetail;
+                                                    bathtoomRating[@"likeUserInfo"] = currentUser;
+                                                    bathtoomRating[@"reviewInfo"] = objectReview;
                                                     
                                                     [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                                         
@@ -543,12 +549,10 @@
                                                     [[[UIAlertView alloc] initWithTitle:@"CleanBM" message:[error userInfo][@"error"]  delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
                                                 }
                                             }];
-                                            
                                         } else {
                                             // show the signup or login screen
                                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"You are not LoggedIn!" delegate:self cancelButtonTitle:@"Login" otherButtonTitles:@"Cancel", nil];
                                             alert.tag = 123;
-                                            
                                             [alert show];
                                             return;
                                         }
@@ -558,9 +562,7 @@
     UITableViewRowAction *button2 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"Report" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath)
                                      {
                                          NSLog(@"Action to perform with Button2!");
-                                         
                                          selectedIndex = indexPath.row;
-                                         
                                          UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Report as inappropriate?" delegate:self cancelButtonTitle:@"Yes" otherButtonTitles:@"No", nil];
                                          alert.tag = 100;
                                          [alert show];
@@ -569,6 +571,7 @@
     
     return @[button, button2]; //array with all the buttons you want. 1,2,3, etc...
 }
+
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     // you need to implement this method too or nothing will work:
@@ -680,6 +683,13 @@
                 if (currentUser) {
                     // do stuff with the user
                     
+                    if([currentUser.objectId isEqualToString:objectReview[@"userId"]]){
+                        
+                        [StringUtilityClass ShowAlertMessageWithHeader:@"CleanBM" Message:@"You can not report yourself!"];
+                        
+                        return;
+                    }
+                    
                     PFQuery *query = [PFQuery queryWithClassName:@"ReportReview"];
                     
                     [query whereKey:@"reportedUser" containsString:currentUser.objectId];
@@ -715,6 +725,11 @@
                             bathtoomRating[@"reportCount"] = [NSNumber numberWithInt:1];
                             bathtoomRating[@"reviewUserId"] = objectReview[@"userId"];
                             bathtoomRating[@"bathroomId"] = [_bathRoomDetail objectId];
+                            
+                            bathtoomRating[@"bathInfo"] = _bathRoomDetail;
+                            bathtoomRating[@"reportedUserInfo"] = currentUser;
+                            bathtoomRating[@"reviewInfo"] = objectReview;
+
                             
                             [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                 
@@ -764,10 +779,8 @@
             }
         }
             break;
-        case 111:
-        {
-            if(buttonIndex == 0)
-            {
+        case 111:{
+            if(buttonIndex == 0){
                 //Upload Photo
                 isPhotoUplaoding = YES;
                 PFUser *currentUser = [PFUser currentUser];
@@ -776,11 +789,22 @@
                 [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:_bathRoomDetail.objectId withIndex:0];
             }
         }
+            break;
+        case 333:{
+            if(buttonIndex == 1){
+                //Logout
+                [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
+                    if(error == nil){
+                        [self configureMenuView];
+                    }
+                }];
+            }
+        }
+            break;
         default:
             break;
     }
 }
-
 
 -(void)uploadImagesOnServerWithUserId:(NSString *)userId andBathRoomID:(NSString *)bathroomId withIndex:(NSInteger)index{
     
@@ -889,11 +913,9 @@
     [alert show];
 }
 
-
 //@Yogendra
 #pragma mark -- Previous
-- (IBAction)actionPreviousButtonPressed:(id)sender
-{
+- (IBAction)actionPreviousButtonPressed:(id)sender{
     CGFloat width;
     if(IS_IPHONE_4 || IS_IPHONE_5){
         width = 90;
@@ -913,17 +935,6 @@
         frame.size = _collectionViewBathImages.frame.size;
         
         [_collectionViewBathImages scrollRectToVisible:frame animated:YES];
-        
-//       // [_btnNext setImage:[UIImage imageNamed:@"right_back"] forState:UIControlStateNormal];
-//        
-//        if (_collectionViewBathImages.contentOffset.x > 0) {
-//            [_btnPrevious setImage:[UIImage imageNamed:@"left_back_blue"] forState:UIControlStateNormal];
-//            
-//        }else{
-//            [_btnPrevious setImage:[UIImage imageNamed:@"left_back"] forState:UIControlStateNormal];
-//            
-//        }
-        
     }
 }
 
@@ -950,14 +961,253 @@
         
         [_collectionViewBathImages scrollRectToVisible:frame animated:YES];
         
-        //[_btnNext setImage:[UIImage imageNamed:@"right_back"] forState:UIControlStateNormal];
-        //[_btnPrevious setImage:[UIImage imageNamed:@"left_back_blue"] forState:UIControlStateNormal];
-        
-    }else{
-        
-        //[_btnNext setImage:[UIImage imageNamed:@"right_back_gray"] forState:UIControlStateNormal];
-        
     }
+}
+
+#pragma MENU BUTTON
+-(IBAction)actionMenuButton:(id)sender{
+    
+    [self menuButton];
+}
+
+- (void) menuButton{
+    if (self.menu.isOpen)
+        return [self.menu close];
+    
+    [self.menu showFromNavigationController:self.navigationController];
+}
+
+-(void)configureMenuView{
+    // do stuff with the user
+    REMenuItem *loginSignUpItem = [[REMenuItem alloc] initWithTitle:@"Home"
+                                                           subtitle:@""
+                                                              image:[UIImage imageNamed:@"home_icon"]
+                                                   highlightedImage:nil
+                                                             action:^(REMenuItem *item) {
+                                                                 NSLog(@"Item: %@", item);
+                                                                 
+                                                                 [self performSelector:@selector(actionNearMe:) withObject:nil afterDelay:0.3];
+                                                             }];
+    
+    REMenuItem *searchNearMeItem = [[REMenuItem alloc] initWithTitle:@"Search Near Me"
+                                                            subtitle:@""
+                                                               image:[UIImage imageNamed:@"location_icon"]
+                                                    highlightedImage:nil
+                                                              action:^(REMenuItem *item) {
+                                                                  NSLog(@"Item: %@", item);
+                                                                  
+                                                                  [self performSelector:@selector(actionHomePage:) withObject:nil afterDelay:0.3];
+                                                              }];
+    
+    REMenuItem *searchLocationItem = [[REMenuItem alloc] initWithTitle:@"Search Location"
+                                                              subtitle:@""
+                                                                 image:[UIImage imageNamed:@"search_icon"]
+                                                      highlightedImage:nil
+                                                                action:^(REMenuItem *item) {
+                                                                    NSLog(@"Item: %@", item);
+                                                                    [self performSelector:@selector(actionSearchNearMe:) withObject:nil afterDelay:0.3];
+                                                                }];
+    REMenuItem *addNewLocationItem = [[REMenuItem alloc] initWithTitle:@"Add New Location"
+                                                                 image:[UIImage imageNamed:@"add_bathroom_icon"]
+                                                      highlightedImage:nil
+                                                                action:^(REMenuItem *item) {
+                                                                    NSLog(@"Item: %@", item);
+                                                                    
+                                                                    [self performSelector:@selector(actionAddNewLocation:) withObject:nil afterDelay:0.3];
+                                                                }];
+    
+    REMenuItem *supportItem = [[REMenuItem alloc] initWithTitle:@"Support"
+                                                          image:[UIImage imageNamed:@"support_icon"]
+                                               highlightedImage:nil
+                                                         action:^(REMenuItem *item) {
+                                                             NSLog(@"Item: %@", item);
+                                                             [self performSelector:@selector(actionSupportCleanBM:) withObject:nil afterDelay:0.3];
+                                                         }];
+    
+    REMenuItem *logoutItem = [[REMenuItem alloc] initWithTitle:@"Login/Sign Up"
+                                                      subtitle:@""
+                                                         image:[UIImage imageNamed:@"login_icon"]
+                                              highlightedImage:nil
+                                                        action:^(REMenuItem *item) {
+                                                            NSLog(@"Item: %@", item);
+                                                            [self performSelector:@selector(actionLoginSignUp:) withObject:nil afterDelay:0.3];
+                                                        }];
+    
+    REMenuItem *myAccountItem =[[REMenuItem alloc] initWithTitle:@"My Account"
+                                                        subtitle:@""
+                                                           image:[UIImage imageNamed:@"login_icon"]
+                                                highlightedImage:nil
+                                                          action:^(REMenuItem *item) {
+                                                              NSLog(@"Item: %@", item);
+                                                              [self performSelector:@selector(actionMyAccount:) withObject:nil afterDelay:0.3];
+                                                          }];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (currentUser) {
+        // do stuff with the user
+        
+        logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
+                                              subtitle:@""
+                                                 image:[UIImage imageNamed:@"sing_out_button"]
+                                      highlightedImage:nil
+                                                action:^(REMenuItem *item) {
+                                                    NSLog(@"Item: %@", item);
+                                                    
+                                                    [self performSelector:@selector(actionLogout:) withObject:nil afterDelay:0.1];
+                                                }];
+        
+        loginSignUpItem.tag = 0;
+        searchNearMeItem.tag = 1;
+        searchLocationItem.tag = 2;
+        addNewLocationItem.tag = 3;
+        supportItem.tag = 4;
+        logoutItem.tag = 6;
+        myAccountItem.tag = 5;
+        
+        _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,myAccountItem ,logoutItem]];
+    }else{
+        loginSignUpItem.tag = 0;
+        searchNearMeItem.tag = 1;
+        searchLocationItem.tag = 2;
+        addNewLocationItem.tag = 3;
+        supportItem.tag = 4;
+        logoutItem.tag = 5;
+        _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,logoutItem]];
+    }
+    
+    if (!REUIKitIsFlatMode()) {
+        self.menu.cornerRadius = 4;
+        self.menu.shadowRadius = 4;
+        self.menu.shadowColor = [UIColor blackColor];
+        self.menu.shadowOffset = CGSizeMake(0, 1);
+        self.menu.shadowOpacity = 1;
+    }
+    
+    self.menu.separatorOffset = CGSizeMake(15.0, 0.0);
+    self.menu.imageOffset = CGSizeMake(5, -1);
+    self.menu.waitUntilAnimationIsComplete = NO;
+    self.menu.badgeLabelConfigurationBlock = ^(UILabel *badgeLabel, REMenuItem *item) {
+        badgeLabel.backgroundColor = [UIColor colorWithRed:0 green:179/255.0 blue:134/255.0 alpha:1];
+        badgeLabel.layer.borderColor = [UIColor colorWithRed:0.000 green:0.648 blue:0.507 alpha:1.000].CGColor;
+    };
+    self.menu.delegate = self;
+    
+    [self.menu setClosePreparationBlock:^{
+        NSLog(@"Menu will close");
+    }];
+    
+    [self.menu setCloseCompletionHandler:^{
+        NSLog(@"Menu did close");
+    }];
+}
+
+-(IBAction)actionHomePage:(id)sender{
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    BOOL isHomeAvailabel = NO;
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[HomeViewController class]])
+        {
+            isHomeAvailabel = YES;
+            
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+    
+    if(!isHomeAvailabel){
+        AppDelegate *appDelegate = [AppDelegate getInstance];
+        appDelegate.strRequestFor = @"NearMe";
+        HomeViewController *homeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"homeViewController"];
+        [self.navigationController pushViewController:homeViewController animated:YES];
+    }
+}
+
+#pragma ACTION LOGIN SIGNUP AFTER DELAY
+-(IBAction)actionLoginSignUp:(id)sender{
+    ViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"viewController"];
+    
+    AppDelegate *appDelegate = [AppDelegate getInstance];
+    appDelegate.strRootOrLogin = @"LoginViewController";
+    
+    [self.navigationController pushViewController:viewController animated:YES];
+}
+
+#pragma ACTION SUPPORT CLEANBM AFTER DELAY
+-(IBAction)actionSupportCleanBM:(id)sender{
+    SupportViewController *supportViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"supportViewController"];
+    [self.navigationController pushViewController:supportViewController animated:YES];
+}
+-(IBAction)actionNearMe:(id)sender{
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[NearMeViewController class]])
+        {
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+}
+
+-(IBAction)actionLogout:(id)sender{
+    NSLog(@"Logout");
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Do you want to logout?" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Logout", nil ];
+    
+    alert.tag = 333;
+    
+    [alert show];
+}
+
+#pragma ACTION SEARCH NEAR ME AFTER DELAY
+-(IBAction)actionSearchNearMe:(id)sender{
+    SearchLocationViewController *searchLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"searchLocationViewController"];
+    [self.navigationController pushViewController:searchLocationViewController animated:YES];
+}
+
+-(IBAction)actionMyAccount:(id)sender{
+    MyAccountViewController *myAccountViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"myAccountViewController"];
+    [self.navigationController pushViewController:myAccountViewController animated:YES];
+}
+
+#pragma ACTION SUPPORT CLEANBM AFTER DELAY
+-(IBAction)actionAddNewLocation:(id)sender{
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    BOOL isAddLoacationAvailabel = NO;
+    
+    for (UIViewController *viewController in viewControllers) {
+        if([viewController isKindOfClass:[AddLoacationViewController class]]){
+            isAddLoacationAvailabel = YES;
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+    
+    if(!isAddLoacationAvailabel){
+        AddLoacationViewController *addLoacationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"addLoacationViewController"];
+        [self.navigationController pushViewController:addLoacationViewController animated:YES];
+    }
+}
+
+#pragma mark - REMenu Delegate Methods
+-(void)willOpenMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
+-(void)didOpenMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
+-(void)willCloseMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
+-(void)didCloseMenu:(REMenu *)menu{
+    NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
 }
 
 @end

@@ -786,8 +786,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     switch (alertView.tag) {
         case 123:
-            if(buttonIndex == 1)
-            {
+            if(buttonIndex == 1){
                 [PFUser logOutInBackgroundWithBlock:^(NSError *error) {
                     if(error == nil){
                         [self configureMenuView];

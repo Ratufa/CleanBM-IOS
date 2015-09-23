@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
-
+#import "REMenu.h"
 @interface BathRoomDetailViewController : UIViewController
 {
     
 }
 @property(nonatomic ,strong)PFObject *bathRoomDetail;
+
+@property (strong, readonly, nonatomic) REMenu *menu;
 
 @end
