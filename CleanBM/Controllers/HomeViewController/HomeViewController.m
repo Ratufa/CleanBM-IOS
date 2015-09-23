@@ -100,8 +100,13 @@
 
 #pragma mark -- GET RESTAURANT'S
 -(void)getRestaurantsWithLocationName:(NSString *)locationName{
+    
+    //CleanBM key = AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE
+    
+    // upeepz key = AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+%@&key=AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         
         if([responseObject isKindOfClass:[NSDictionary class]]){
@@ -109,12 +114,40 @@
             
             NSInteger counter = mArraybathRooms.count;
             
+            NSMutableArray *mArrayHolder = [mArraybathRooms mutableCopy];
+            
             for (NSMutableDictionary *mDictRestaurantDetail in arrayRestaurant) {
-                [mArraybathRooms addObject:mDictRestaurantDetail];
+                
+                BOOL isLocationAvailable = NO;
+                
+                
+                for (id object in mArrayHolder) {
+                    
+                    if([object isKindOfClass:[PFObject class]]){
+                        
+                        PFGeoPoint *bathroomGeoPoint = object[@"bathLocation"];
+                        
+                        NSDictionary *bathroomGeoLocation = [[mDictRestaurantDetail objectForKey:@"geometry"] objectForKey:@"location"];
+                        
+                        double latitude = [bathroomGeoLocation[@"lat"] doubleValue];
+                        
+                        double longitude = [bathroomGeoLocation[@"lng"] doubleValue];
+                        
+                        if(bathroomGeoPoint.latitude == latitude && bathroomGeoPoint.longitude == longitude){
+                            
+                            isLocationAvailable = YES;
+                            break;
+                        }
+                    }
+                }
+                
+                if(!isLocationAvailable){
+                    [mArraybathRooms addObject:mDictRestaurantDetail];
+                }
             }
             
             while (counter < [mArraybathRooms count]) {
-             
+                
                 NSMutableDictionary *restaurantDetail = [mArraybathRooms objectAtIndex:counter];
                 
                 Annotation *ann = [[Annotation alloc] init];
@@ -160,28 +193,60 @@
 #pragma mark -- GET HOTEL'S
 -(void)getHotelsWithLocationName:(NSString *)locationName{
     
+    //CleanBM key = AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE
+    
+    // upeepz key = AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw
+    
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotel+in+%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotel+in+%@&key=AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
         NSLog(@"JSON: %@", responseObject);
         
         if([responseObject isKindOfClass:[NSDictionary class]]){
+            
             NSArray *arrayRestaurant = [responseObject valueForKey:@"results"];
             
             NSInteger counter = mArraybathRooms.count;
             
-            for (NSMutableDictionary *mDictRestaurantDetail in arrayRestaurant) {
-                [mArraybathRooms addObject:mDictRestaurantDetail];
+            NSMutableArray *mArrayHolder = [mArraybathRooms mutableCopy];
+            
+            for (NSMutableDictionary *mDictHotelDetail in arrayRestaurant) {
+                
+                BOOL isLocationAvailable = NO;
+                
+                for (id object in mArrayHolder) {
+                    
+                    if([object isKindOfClass:[PFObject class]]){
+                        
+                        PFGeoPoint *bathroomGeoPoint = object[@"bathLocation"];
+                        
+                        NSDictionary *bathroomGeoLocation = [[mDictHotelDetail objectForKey:@"geometry"] objectForKey:@"location"];
+                        
+                        double latitude = [bathroomGeoLocation[@"lat"] doubleValue];
+                        
+                        double longitude = [bathroomGeoLocation[@"lng"] doubleValue];
+                        
+                        if(bathroomGeoPoint.latitude == latitude && bathroomGeoPoint.longitude == longitude){
+                            
+                            isLocationAvailable = YES;
+                            break;
+                        }
+                    }
+                }
+                if(!isLocationAvailable){
+                    [mArraybathRooms addObject:mDictHotelDetail];
+                }
             }
             
             while (counter < [mArraybathRooms count]) {
                 
-                NSMutableDictionary *restaurantDetail = [mArraybathRooms objectAtIndex:counter];
+                NSMutableDictionary *hotelDetail = [mArraybathRooms objectAtIndex:counter];
                 
                 Annotation *ann = [[Annotation alloc] init];
                 
                 CLLocationCoordinate2D annotationCoord;
                 
-                NSDictionary *bathroomGeoLocation = [[restaurantDetail objectForKey:@"geometry"] objectForKey:@"location"];
+                NSDictionary *bathroomGeoLocation = [[hotelDetail objectForKey:@"geometry"] objectForKey:@"location"];
                 
                 annotationCoord.latitude = [bathroomGeoLocation[@"lat"] doubleValue];
                 
@@ -191,7 +256,7 @@
                 
                 ann.coordinate = annotationCoord;
                 
-                ann.title = restaurantDetail[@"name"];
+                ann.title = hotelDetail[@"name"];
                 
                 _mapView.delegate = self;
                 
@@ -202,7 +267,6 @@
                 [_mapView addAnnotation:ann];
             }
         }
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
     }];
@@ -294,7 +358,7 @@
                                                               
                                                               [self performSelector:@selector(actionMyAccount:) withObject:nil afterDelay:0.3];
                                                           }];
-
+    
     
     PFUser *currentUser = [PFUser currentUser];
     
@@ -408,10 +472,6 @@
                 
                 ann.title = bathRoomObject[@"bathFullAddress"];
                 
-               // ann.title = bathRoomObject[@"bathroomFullAddress"];
-                
-                //ann.subtitle = [[dictResponse valueForKey:@"details"] valueForKey:@"res_address"];
-                
                 _mapView.delegate = self;
                 
                 ann.tag = i;
@@ -442,7 +502,7 @@
 -(void)actionSearchLocation{
     
     _viewHeader.hidden = NO;
-
+    
     PFQuery *query = [PFQuery queryWithClassName:@"BathRoomDetail"];
     //[query2 whereKey:@"members" containsIn:@""];
     [query whereKey:@"bathFullAddress" containsString:_strSearchLocation];
@@ -456,7 +516,7 @@
         NSLog(@"Data =%@",objects);
         
         if(error == nil){
-
+            
             NSArray *annotations = [_mapView annotations];
             
             for (int j=0; j < [annotations count]; j++) {
@@ -466,7 +526,7 @@
             }
             
             _viewHeader.hidden = YES;
-
+            
             mArraybathRooms = [[NSMutableArray alloc]initWithArray:objects];
             for (int i =0; i < [mArraybathRooms count]; i++) {
                 
@@ -485,7 +545,7 @@
                 ann.coordinate = annotationCoord;
                 
                 ann.locationType = @"bathRoom";
-
+                
                 ann.title = bathRoomObject[@"bathFullAddress"];
                 
                 // ann.title = bathRoomObject[@"bathroomFullAddress"];
@@ -595,7 +655,18 @@
 }
 
 -(IBAction)actionHomePage:(id)sender{
-    [self.navigationController popViewControllerAnimated:YES];
+    //[self.navigationController popViewControllerAnimated:YES];
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[NearMeViewController class]])
+        {
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+
 }
 
 -(IBAction)actionMyAccount:(id)sender{
@@ -659,7 +730,7 @@
         
         if([object isKindOfClass:[PFObject class]]){
             NSLog(@"BathRoom");
-             BathRoomDetailViewController *bathRoomDetailViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"bathRoomDetailViewController"];
+            BathRoomDetailViewController *bathRoomDetailViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"bathRoomDetailViewController"];
             bathRoomDetailViewController.bathRoomDetail = [mArraybathRooms objectAtIndex:[sender tag ]];
             
             [self.navigationController pushViewController:bathRoomDetailViewController animated:YES];
@@ -669,7 +740,7 @@
             addNewLocationViewController.strRequestFor = @"addRestaurant";
             addNewLocationViewController.mDictRestaurantHotelDetail = (NSMutableDictionary *)object;
             addNewLocationViewController.requestFor = 1;
-
+            
             [self.navigationController pushViewController:addNewLocationViewController animated:YES];
         }
     }

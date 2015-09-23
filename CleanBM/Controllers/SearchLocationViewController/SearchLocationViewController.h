@@ -7,7 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "REMenu.h"
 
 @interface SearchLocationViewController : UIViewController
+{
+    
+}
+
+@property (strong, readonly, nonatomic) REMenu *menu;
 
 @end

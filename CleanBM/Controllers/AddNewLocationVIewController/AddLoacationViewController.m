@@ -18,7 +18,7 @@
 #import "AppDelegate.h"
 #import "SupportViewController.h"
 
-@interface AddLoacationViewController ()<MKMapViewDelegate>{
+@interface AddLoacationViewController ()<MKMapViewDelegate,REMenuDelegate>{
     
 }
 
@@ -34,11 +34,20 @@
     _mapView.delegate = self;
     
     [self setposition];
+    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    
+    [super viewWillAppear:animated];
+    
+    [self configureMenuView];
+    
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle{
@@ -207,12 +216,24 @@
     
     NSArray *viewControllers = [self.navigationController viewControllers];
     
+    BOOL isHomeAvailabel = NO;
+
+    
     for (UIViewController *viewController in viewControllers) {
         
         if([viewController isKindOfClass:[HomeViewController class]])
         {
+            isHomeAvailabel = YES;
+
             [self.navigationController popToViewController:viewController animated:YES];
         }
+    }
+    
+    if(!isHomeAvailabel){
+        AppDelegate *appDelegate = [AppDelegate getInstance];
+        appDelegate.strRequestFor = @"NearMe";
+        HomeViewController *homeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"homeViewController"];
+        [self.navigationController pushViewController:homeViewController animated:YES];
     }
 }
 
@@ -228,9 +249,26 @@
 
 #pragma ACTION SUPPORT CLEANBM AFTER DELAY
 -(IBAction)actionSupportCleanBM:(id)sender{
-    SupportViewController *supportViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"supportViewController"];
-    [self.navigationController pushViewController:supportViewController animated:YES];
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    BOOL isSupportAvailabel = NO;
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[SupportViewController class]])
+        {
+            isSupportAvailabel = YES;
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+    
+    if(!isSupportAvailabel){
+        SupportViewController *supportViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"supportViewController"];
+        [self.navigationController pushViewController:supportViewController animated:YES];
+    }
 }
+
 -(IBAction)actionNearMe:(id)sender{
     NSArray *viewControllers = [self.navigationController viewControllers];
     
@@ -255,8 +293,25 @@
 
 #pragma ACTION SEARCH NEAR ME AFTER DELAY
 -(IBAction)actionSearchNearMe:(id)sender{
-    SearchLocationViewController *searchLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"searchLocationViewController"];
-    [self.navigationController pushViewController:searchLocationViewController animated:YES];
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    BOOL isSearchLocationAvailabel = NO;
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[SearchLocationViewController class]])
+        {
+            isSearchLocationAvailabel = YES;
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+    
+    if(!isSearchLocationAvailabel){
+        SearchLocationViewController *searchLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"searchLocationViewController"];
+        [self.navigationController pushViewController:searchLocationViewController animated:YES];
+
+    }
 }
 
 -(IBAction)actionMyAccount:(id)sender{
@@ -318,52 +373,12 @@
         [[NSUserDefaults standardUserDefaults] setValue:strAddress forKey:@"NewLocationFullAddress"];
         [[NSUserDefaults standardUserDefaults]synchronize];
     }
-    
-   
 
-    
-//    CLGeocoder * geoCoder = [[CLGeocoder alloc] init];
-//
-//    [geoCoder reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-//        if(placemarks.count){
-//            
-////            NSString *strAddress = [NSString stringWithFormat:@"%@ %@ %@ %@ %@ %@ %@",[placemarks[0] subThoroughfare],[placemarks[0] thoroughfare],[placemarks[0] locality],[placemarks[0] administrativeArea],[placemarks[0] country],[placemarks[0] postalCode],[placemarks[0] ocean]];
-//            
-//            
-//            
-//            CLPlacemark *placemark = placemarks[0];
-//            NSArray *lines = placemark.addressDictionary[ @"FormattedAddressLines"];
-//            //NSString *addressString = [lines componentsJoinedByString:@"\n"];
-//            //NSLog(@"Address: %@", addressString);
-//            
-//            
-//            //NSString *strAddress = [NSString stringWithFormat:@"%@ %@",[placemarks[0] subThoroughfare],[placemarks[0] thoroughfare]];
-//            
-//            NSString *strAddress = [NSString stringWithFormat:@"%@",lines[0]];
-//            
-//            strAddress = [strAddress stringByReplacingOccurrencesOfString:@"(null)" withString:@""];
-//            
-//            [[NSUserDefaults standardUserDefaults] setValue:strAddress forKey:@"NewLocationFullAddress"];
-//            [[NSUserDefaults standardUserDefaults]synchronize];
-//        }
-    //}];
 }
 
 
 -(NSArray *)getAddressFromLatLon:(double)pdblLatitude withLongitude:(double)pdblLongitude
 {
-//    NSString *urlString = [NSString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&sensor=true",pdblLatitude, pdblLongitude];
-//    NSError* error;
-//    NSString *locationString = [NSString stringWithContentsOfURL:[NSURL URLWithString:urlString] encoding:NSASCIIStringEncoding error:&error];
-//    // NSLog(@"%@",locationString);
-//    
-//    locationString = [locationString stringByReplacingOccurrencesOfString:@"\"" withString:@""];
-//    
-//    return [locationString substringFromIndex:6];
-    
-    
-    
-    //[self showLoadingView:@"Loading.."];
     NSError *error = nil;
     
     NSString *lookUpString  = [NSString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&amp;sensor=false", pdblLatitude,pdblLongitude];

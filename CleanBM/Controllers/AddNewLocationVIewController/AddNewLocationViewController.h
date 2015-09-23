@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <Parse/Parse.h>
+#import "REMenu.h"
 
 @interface AddNewLocationViewController : UIViewController
 {
@@ -22,5 +23,9 @@
 @property (nonatomic ,strong)NSMutableArray *mArrayReviewsList;
 @property (nonatomic ,retain)NSString *strBathRoomId;
 @property (nonatomic ,strong)PFObject *bathRoomDetail;
+
+
+@property (strong, readonly, nonatomic) REMenu *menu;
+
 
 @end

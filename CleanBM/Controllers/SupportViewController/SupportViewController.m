@@ -212,18 +212,29 @@
     
     NSArray *viewControllers = [self.navigationController viewControllers];
     
+    BOOL isHomeAvailabel = NO;
+
+    
     for (UIViewController *viewController in viewControllers) {
         
         if([viewController isKindOfClass:[HomeViewController class]])
         {
+            isHomeAvailabel = YES;
             [self.navigationController popToViewController:viewController animated:YES];
         }
     }
     
+    if(!isHomeAvailabel){
+        AppDelegate *appDelegate = [AppDelegate getInstance];
+        appDelegate.strRequestFor = @"NearMe";
+        HomeViewController *homeViewController = [self.storyboard instantiateViewControllerWithIdentifier:@"homeViewController"];
+        [self.navigationController pushViewController:homeViewController animated:YES];
+    }
 }
 
 #pragma ACTION LOGIN SIGNUP AFTER DELAY
 -(IBAction)actionLoginSignUp:(id)sender{
+    
     ViewController *viewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"viewController"];
     
     AppDelegate *appDelegate = [AppDelegate getInstance];
@@ -257,14 +268,47 @@
 
 #pragma ACTION SEARCH NEAR ME AFTER DELAY
 -(IBAction)actionSearchNearMe:(id)sender{
-    SearchLocationViewController *searchLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"searchLocationViewController"];
-    [self.navigationController pushViewController:searchLocationViewController animated:YES];
+    
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+
+    BOOL isSearchAvailabel = NO;
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[SearchLocationViewController class]])
+        {
+            isSearchAvailabel = YES;
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+    
+    if(!isSearchAvailabel){
+        SearchLocationViewController *searchLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"searchLocationViewController"];
+        [self.navigationController pushViewController:searchLocationViewController animated:YES];
+    }
 }
 
 #pragma ACTION SUPPORT CLEANBM AFTER DELAY
 -(IBAction)actionAddNewLocation:(id)sender{
-    AddLoacationViewController *addLoacationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"addLoacationViewController"];
-    [self.navigationController pushViewController:addLoacationViewController animated:YES];
+    
+    NSArray *viewControllers = [self.navigationController viewControllers];
+    
+    BOOL isAddLocationAvailabel = NO;
+    
+    for (UIViewController *viewController in viewControllers) {
+        
+        if([viewController isKindOfClass:[AddLoacationViewController class]])
+        {
+            isAddLocationAvailabel = YES;
+            [self.navigationController popToViewController:viewController animated:YES];
+        }
+    }
+    
+    if(!isAddLocationAvailabel){
+        AddLoacationViewController *addLoacationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"addLoacationViewController"];
+        [self.navigationController pushViewController:addLoacationViewController animated:YES];
+    }
 }
 
 -(IBAction)actionMyAccount:(id)sender{
