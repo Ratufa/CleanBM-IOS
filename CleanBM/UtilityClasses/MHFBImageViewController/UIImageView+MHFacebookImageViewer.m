@@ -8,37 +8,50 @@
 
 #import "UIImageView+MHFacebookImageViewer.h"
 #import <objc/runtime.h>
+#import "AppDelegate.h"
+
+
 @interface UIImageView()<UITabBarControllerDelegate>
 
+
 @property (nonatomic, assign) MHFacebookImageViewer *imageBrowser;
+
 
 @end
 
 static char kImageBrowserKey;
 
+
 #pragma mark - UIImageView Category
 @implementation UIImageView (MHFacebookImageViewer)
 
 #pragma mark - Initializer for UIImageView
-- (void) setupImageViewer {
-    [self setupImageViewerWithCompletionOnOpen:nil onClose:nil];
+- (void) setupImageViewerWithId:(NSString *)imgId {
+    
+    AppDelegate *addDelegate = [AppDelegate getInstance];
+    addDelegate.imgBathroomId = imgId;
+    [self setupImageViewerWithCompletionOnOpen:nil onClose:nil WithId:imgId];
 }
 
-- (void) setupImageViewerWithCompletionOnOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
-    [self setupImageViewerWithImageURL:nil onOpen:open onClose:close];
+- (void) setupImageViewerWithCompletionOnOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close WithId:(NSString *)imgId{
+    [self setupImageViewerWithImageURL:nil onOpen:open onClose:close withId:imgId];
 }
 
 - (void) setupImageViewerWithImageURL:(NSURL*)url {
-    [self setupImageViewerWithImageURL:url onOpen:nil onClose:nil];
+    [self setupImageViewerWithImageURL:url onOpen:nil onClose:nil withId:nil];
 }
 
-
-- (void) setupImageViewerWithImageURL:(NSURL *)url onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close{
+- (void) setupImageViewerWithImageURL:(NSURL *)url onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close withId:(NSString *)imgId{
+    
+    AppDelegate *addDelegate = [AppDelegate getInstance];
+    addDelegate.imgBathroomId = imgId;
     self.userInteractionEnabled = YES;
     MHFacebookImageViewerTapGestureRecognizer *  tapGesture = [[MHFacebookImageViewerTapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.imageURL = url;
     tapGesture.openingBlock = open;
     tapGesture.closingBlock = close;
+    tapGesture.imgId = imgId;
+    
     [self addGestureRecognizer:tapGesture];
     tapGesture = nil;
 }
@@ -49,11 +62,16 @@ static char kImageBrowserKey;
 }
 
 - (void) setupImageViewerWithDatasource:(id<MHFacebookImageViewerDatasource>)imageDatasource initialIndex:(NSInteger)initialIndex onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close{
+    
+    AppDelegate *addDelegate = [AppDelegate getInstance];
+    
+    
     self.userInteractionEnabled = YES;
     MHFacebookImageViewerTapGestureRecognizer *  tapGesture = [[MHFacebookImageViewerTapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.imageDatasource = imageDatasource;
     tapGesture.openingBlock = open;
     tapGesture.closingBlock = close;
+    tapGesture.imgId = addDelegate.imgBathroomId;
     tapGesture.initialIndex = initialIndex;
     [self addGestureRecognizer:tapGesture];
     tapGesture = nil;
@@ -62,6 +80,7 @@ static char kImageBrowserKey;
 
 #pragma mark - Handle Tap
 - (void) didTap:(MHFacebookImageViewerTapGestureRecognizer*)gestureRecognizer {
+    
     
     [self setImageBrowser:[[MHFacebookImageViewer alloc]init]];
     [[self imageBrowser] setSenderView: self];
@@ -72,7 +91,7 @@ static char kImageBrowserKey;
     [[self imageBrowser] setInitialIndex:gestureRecognizer.initialIndex];
     
     if(self.image)
-        [self.imageBrowser presentFromRootViewController];
+        [self.imageBrowser presentFromRootViewControllerWithImageId:gestureRecognizer.imgId];
 }
 
 - (void) dealloc {

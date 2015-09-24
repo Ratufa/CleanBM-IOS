@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <CoreLocation/CoreLocation.h>
-
+#import "BathRoomDetailViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 {
@@ -25,6 +25,10 @@
 @property (nonatomic, strong) NSString *strRootOrLogin;
 @property (nonatomic, strong) NSString *strMenu;
 
+@property (nonatomic ,strong)BathRoomDetailViewController *bathRoomDetailViewController;
+
 +(AppDelegate *)getInstance;
+
+@property (nonatomic,retain)NSString *imgBathroomId;
 @end
 

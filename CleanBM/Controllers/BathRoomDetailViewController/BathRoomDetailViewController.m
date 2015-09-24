@@ -32,7 +32,6 @@
 
 @interface BathRoomDetailViewController ()<UITableViewDataSource,UITableViewDelegate,TPFloatRatingViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,MKMapViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout,UzysAssetsPickerControllerDelegate,REMenuDelegate>
 {
-    NSMutableArray *mArrayBathRoomImages;
     NSMutableArray *mArrayBathRoomReviews;
     UIImage *imageUploaded;
     NSInteger selectedIndex;
@@ -80,6 +79,17 @@
     
     isPhotoUplaoding = NO;
     
+    
+    AppDelegate *appDelegate = [AppDelegate getInstance];
+    
+    appDelegate.bathRoomDetailViewController = self;
+    
+}
+
+-(void)startSampleProcess{
+    
+    [NSTimer scheduledTimerWithTimeInterval:0.0 target:self.delegate
+                                   selector:@selector(processCompleted) userInfo:nil repeats:NO];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -92,10 +102,9 @@
     if(!isPhotoUplaoding){
         [self getReviewList];
     }
-    
     [self configureMenuView];
-    
 }
+
 
 - (IBAction)actionAddPhoto:(id)sender {
 
@@ -245,9 +254,9 @@
             // The find succeeded.
             NSLog(@"Successfully retrieved %d scores.", (int)objects.count);
             
-            mArrayBathRoomImages = [[NSMutableArray alloc] initWithArray:objects];
+            _mArrayBathRoomImages = [[NSMutableArray alloc] initWithArray:objects];
 
-            if([mArrayBathRoomImages count] > 0){
+            if([_mArrayBathRoomImages count] > 0){
                _lblNoimagesAvailable.hidden = YES;
             }else{
                 _lblNoimagesAvailable.hidden = NO;
@@ -589,7 +598,7 @@
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
-    return [mArrayBathRoomImages count];
+    return [_mArrayBathRoomImages count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -600,14 +609,16 @@
     
     imgViewBathroom.image = [UIImage imageNamed:@"bg"];
     
-    PFFile *imageFile = [[mArrayBathRoomImages objectAtIndex:indexPath.item] objectForKey:@"bathroomImage"];
+    PFObject *object = [_mArrayBathRoomImages objectAtIndex:indexPath.item];
+    
+    PFFile *imageFile = [object objectForKey:@"bathroomImage"];
     
     [imageFile getDataInBackgroundWithBlock:^(NSData *data, NSError *error) {
         if (!error) {
             UIImage *image = [UIImage imageWithData:data];
             imgViewBathroom.image = image;
             
-            [self displayImage:imgViewBathroom withImage:image];
+            [self displayImage:imgViewBathroom withImage:image withImageId:object.objectId];
         }
     }];
     
@@ -633,10 +644,11 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (void) displayImage:(UIImageView*)imageView withImage:(UIImage*)image  {
+- (void) displayImage:(UIImageView*)imageView withImage:(UIImage*)image withImageId:(NSString *)imgId
+{
     [imageView setImage:image];
     imageView.contentMode = UIViewContentModeScaleAspectFill;
-    [imageView setupImageViewer];
+    [imageView setupImageViewerWithId:imgId];
     imageView.clipsToBounds = YES;
 }
 

@@ -478,7 +478,6 @@
             else{
                 [self getRestaurantsWithLocationName:_strSearchLocation];
             }
-            
         }else{
             if([[error userInfo][@"error"] isEqualToString:@"The Internet connection appears to be offline."]){
                 _txtSearchLocation.placeholder = @"Unable to reach our servers";
@@ -488,7 +487,6 @@
         }
     }];
 }
-
 
 -(void)actionSearchLocation{
     
@@ -753,6 +751,11 @@
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
     Annotation *custAnnotation = view.annotation;
+    
+    if ([custAnnotation.title isEqualToString:@"Current Location"]) {
+        return;
+    }
+    
     if ([custAnnotation.locationType isEqualToString:@"bathRoom"]) {
         view.image = [UIImage imageNamed:@"small_cleanbm_location_icon"];
     }else if([custAnnotation.locationType isEqualToString:@"restaurant"]){

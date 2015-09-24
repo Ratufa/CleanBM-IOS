@@ -47,7 +47,9 @@ typedef void (^MHFacebookImageViewerClosingBlock)(void);
 @property (nonatomic,assign) NSInteger initialIndex;
 
 
-- (void)presentFromRootViewController;
+//- (void)presentFromRootViewController;
+- (void)presentFromRootViewControllerWithImageId:(NSString *)imgId;
+
 - (void)presentFromViewController:(UIViewController *)controller;
 @end
 
@@ -56,6 +58,7 @@ typedef void (^MHFacebookImageViewerClosingBlock)(void);
 @property(nonatomic,strong) MHFacebookImageViewerOpeningBlock openingBlock;
 @property(nonatomic,strong) MHFacebookImageViewerClosingBlock closingBlock;
 @property(nonatomic,weak) id<MHFacebookImageViewerDatasource> imageDatasource;
+@property(nonatomic,strong)NSString *imgId;
 @property(nonatomic,assign) NSInteger initialIndex;
 
 @end

@@ -26,11 +26,17 @@
 #import "MHFacebookImageViewer.h"
 #import "UIImageView+AFNetworking.h"
 #import <objc/runtime.h>
+#import "BathRoomDetailViewController.h"
+#import "AppDelegate.h"
+#import "StringUtilityClass.h"
+#import "CleanBMLoader.h"
+
+
 static const CGFloat kMinBlackMaskAlpha = 0.3f;
 static const CGFloat kMaxImageScale = 2.5f;
 static const CGFloat kMinImageScale = 1.0f;
 
-@interface MHFacebookImageViewerCell : UITableViewCell<UIGestureRecognizerDelegate,UIScrollViewDelegate>{
+@interface MHFacebookImageViewerCell : UITableViewCell<UIGestureRecognizerDelegate,UIScrollViewDelegate,UIAlertViewDelegate,BathRoomDetailProtocolDelegate>{
     UIImageView * __imageView;
     UIScrollView * __scrollView;
     NSMutableArray *_gestures;
@@ -50,6 +56,9 @@ static const CGFloat kMinImageScale = 1.0f;
 @property(nonatomic,weak) UIImage * defaultImage;
 @property(nonatomic,assign) NSInteger initialIndex;
 @property(nonatomic,strong) UIPanGestureRecognizer* panGesture;
+
+@property (nonatomic,strong)UIButton *btnInAppropriateImage;
+
 
 @property (nonatomic,weak) MHFacebookImageViewerOpeningBlock openingBlock;
 @property (nonatomic,weak) MHFacebookImageViewerClosingBlock closingBlock;
@@ -78,6 +87,7 @@ static const CGFloat kMinImageScale = 1.0f;
 @synthesize defaultImage = _defaultImage;
 @synthesize initialIndex = _initialIndex;
 @synthesize panGesture = _panGesture;
+@synthesize btnInAppropriateImage = _btnInAppropriateImage;
 
 - (void) loadAllRequiredViews{
     self.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -89,6 +99,8 @@ static const CGFloat kMinImageScale = 1.0f;
     [_doneButton addTarget:self
                     action:@selector(close:)
           forControlEvents:UIControlEventTouchUpInside];
+    
+    [_btnInAppropriateImage addTarget:self action:@selector(actionReportInAppropriate:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void) setImageURL:(NSURL *)imageURL defaultImage:(UIImage*)defaultImage imageIndex:(NSInteger)imageIndex {
@@ -223,7 +235,6 @@ static const CGFloat kMinImageScale = 1.0f;
     }];
 }
 
-
 #pragma mark - Dismiss
 - (void)dismissViewController
 {
@@ -352,10 +363,17 @@ static const CGFloat kMinImageScale = 1.0f;
                 _isDoneAnimating = YES;
                 [self.viewController.view addSubview:_doneButton];
                 _doneButton.alpha = 0.0f;
+                
+                [self.viewController.view addSubview:_btnInAppropriateImage];
+                _btnInAppropriateImage.alpha = 0.0f;
+                
+                
                 [UIView animateWithDuration:0.2f delay:0.0f options:UIViewAnimationOptionAllowUserInteraction animations:^{
                     _doneButton.alpha = 1.0f;
+                    _btnInAppropriateImage.alpha = 1.0f;
                 } completion:^(BOOL finished) {
                     [self.viewController.view bringSubviewToFront:_doneButton];
+                    [self.viewController.view bringSubviewToFront:_btnInAppropriateImage];
                     _isDoneAnimating = NO;
                 }];
             }
@@ -391,11 +409,14 @@ static const CGFloat kMinImageScale = 1.0f;
         if(_doneButton.superview) {
             _isDoneAnimating = YES;
             _doneButton.alpha = 1.0f;
+            _btnInAppropriateImage.alpha = 1.0f;
             [UIView animateWithDuration:0.2f delay:0.0f options:UIViewAnimationOptionAllowUserInteraction animations:^{
                 _doneButton.alpha = 0.0f;
+                _btnInAppropriateImage.alpha = 0.0f;
             } completion:^(BOOL finished) {
                 _isDoneAnimating = NO;
                 [_doneButton removeFromSuperview];
+                [_btnInAppropriateImage removeFromSuperview];
             }];
         }
     }
@@ -404,7 +425,158 @@ static const CGFloat kMinImageScale = 1.0f;
 - (void)close:(UIButton *)sender {
     self.userInteractionEnabled = NO;
     [sender removeFromSuperview];
+    [_btnInAppropriateImage removeFromSuperview];
     [self dismissViewController];
+}
+
+-(void)actionReportInAppropriate:(UIButton *)sender{
+    
+//    self.userInteractionEnabled = NO;
+//    [sender removeFromSuperview];
+//    [self dismissViewController];
+    
+    
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Report Inappropriate" message:@"" delegate:self cancelButtonTitle:@"Report" otherButtonTitles:@"Cancel", nil];
+    alert.tag = 1111;
+    [alert show];
+    
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    switch (alertView.tag) {
+        case 1111:
+        {
+            switch (buttonIndex) {
+                case 0:{
+                    //[self dismissViewController];
+                    //[[NSNotificationCenter defaultCenter] postNotificationName:@"ReportInAppropriate" object:nil];
+                    AppDelegate *appDelegate = [AppDelegate getInstance];
+                    
+                    appDelegate.bathRoomDetailViewController.delegate = self;
+                    [appDelegate.bathRoomDetailViewController startSampleProcess];
+                    
+                }
+                    break;
+                default:{
+                    [self dismissViewController];
+                }
+                    break;
+            }
+        }
+            break;
+            
+        case 555:{
+            [self dismissViewController];
+
+        }
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+#pragma mark - Sample protocol delegate
+-(void)processCompleted{
+    //[myLabel setText:@"Process Completed"];
+    
+    NSLog(@"Report By Delegate");
+    
+    AppDelegate *appDelegate = [AppDelegate getInstance];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"objectId CONTAINS %@",appDelegate.imgBathroomId];
+    
+    NSArray *filterArray = [appDelegate.bathRoomDetailViewController.mArrayBathRoomImages filteredArrayUsingPredicate:predicate];
+    
+    
+    PFObject *objectReview = [filterArray objectAtIndex:0];
+    
+    PFUser *currentUser = [PFUser currentUser];
+    
+    if (currentUser) {
+        // do stuff with the user
+        
+        if([currentUser.objectId isEqualToString:objectReview[@"userId"]]){
+            
+            [StringUtilityClass ShowAlertMessageWithHeader:@"CleanBM" Message:@"You can not report yourself!"];
+            return;
+        }
+        
+        
+        [CleanBMLoader showLoader:self.viewController withShowHideOption:YES];
+
+        
+        PFQuery *query = [PFQuery queryWithClassName:@"ReportImage"];
+        
+        [query whereKey:@"reportedUserId" containsString:currentUser.objectId];
+        
+        PFQuery *query2 = [PFQuery queryWithClassName:@"ReportImage"];
+        
+        [query2 whereKey:@"imageId" containsString:objectReview.objectId];
+        
+        PFQuery *mainQuery = [PFQuery orQueryWithSubqueries:@[query,query2]];
+        
+        [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            NSLog(@"Data =%@",objects);
+            
+            for (int i = 0; i < [objects count]; i++) {
+                
+                PFObject *objectData = [objects objectAtIndex:i];
+                
+                if ([objectData[@"reportedUserId"] isEqualToString:currentUser.objectId] && [objectData[@"imageId"] isEqualToString:objectReview.objectId]) {
+                    
+                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have already reported." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [alert show];
+                    [CleanBMLoader showLoader:self.viewController withShowHideOption:NO];
+
+                    return ;
+                }
+            }
+            
+            if(error == nil){
+                
+                PFObject* bathtoomRating = [PFObject objectWithClassName:@"ReportImage"];
+                
+                bathtoomRating[@"reportedUserId"] = currentUser.objectId;//who login user
+                bathtoomRating[@"imageId"] = objectReview.objectId;
+                bathtoomRating[@"reportCount"] = [NSNumber numberWithInt:1];
+                bathtoomRating[@"imageUserId"] = objectReview[@"userId"];
+                bathtoomRating[@"bathroomId"] = [appDelegate.bathRoomDetailViewController.bathRoomDetail objectId];
+                
+                bathtoomRating[@"bathInfo"] = appDelegate.bathRoomDetailViewController.bathRoomDetail;
+                bathtoomRating[@"reportedUserInfo"] = currentUser;
+                bathtoomRating[@"bathImagesInfo"] = objectReview;
+                
+                [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    
+                    if(succeeded){
+                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have successfully reported Inappropriate content." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                        alert.tag = 555;
+                        [alert show];
+                        
+                        NSNumber *incrementedNumber = [NSNumber numberWithInt:1];
+                        
+                        [objectReview incrementKey:@"reportCount" byAmount:incrementedNumber];
+                        [objectReview saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                            //[self getReviewList];
+                        }];
+                        
+                    }else{
+                        NSString *errorString = [error userInfo][@"error"];
+                        // Show the errorString somewhere and let the user try again.
+                        [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                    }
+                    [CleanBMLoader showLoader:self.viewController withShowHideOption:NO];
+                }];
+            }else{
+                [[[UIAlertView alloc] initWithTitle:@"CleanBM" message:[error userInfo][@"error"]  delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                
+                [CleanBMLoader showLoader:self.viewController withShowHideOption:NO];
+            }
+        }];
+    }
+    
 }
 
 - (void) dealloc {
@@ -429,6 +601,9 @@ static const CGFloat kMinImageScale = 1.0f;
     BOOL _isDoneAnimating;
 
     UIStatusBarStyle _statusBarStyle;
+    
+    UIButton *_btnInAppropriateImage;
+    
 }
 
 @end
@@ -469,6 +644,7 @@ static const CGFloat kMinImageScale = 1.0f;
         imageViewerCell.superView = _senderView.superview;
         imageViewerCell.senderView = _senderView;
         imageViewerCell.doneButton = _doneButton;
+        imageViewerCell.btnInAppropriateImage = _btnInAppropriateImage;
         imageViewerCell.initialIndex = _initialIndex;
         imageViewerCell.statusBarStyle = _statusBarStyle;
         [imageViewerCell loadAllRequiredViews];
@@ -538,11 +714,22 @@ static const CGFloat kMinImageScale = 1.0f;
     [_doneButton setImageEdgeInsets:UIEdgeInsetsMake(-10, -10, -10, -10)];  // make click area bigger
     [_doneButton setImage:[UIImage imageNamed:@"Done"] forState:UIControlStateNormal];
     _doneButton.frame = CGRectMake(windowBounds.size.width - (51.0f + 9.0f),15.0f, 51.0f, 26.0f);
+    
+    
+    _btnInAppropriateImage = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_btnInAppropriateImage setImageEdgeInsets:UIEdgeInsetsMake(-10, -10, -10, -10)];  // make click area bigger
+    [_btnInAppropriateImage setImage:[UIImage imageNamed:@"report_button"] forState:UIControlStateNormal];
+    _btnInAppropriateImage.frame = CGRectMake(10,15.0f, 171.0f, 28.0f);
 }
 
+
 #pragma mark - Show
-- (void)presentFromRootViewController
+- (void)presentFromRootViewControllerWithImageId:(NSString *)imgId;
 {
+    
+    AppDelegate *appDelegate = [AppDelegate getInstance];
+    appDelegate.imgBathroomId = imgId;
+    
     UIViewController *rootViewController = [UIApplication sharedApplication].keyWindow.rootViewController;
     [self presentFromViewController:rootViewController];
 }
@@ -554,8 +741,6 @@ static const CGFloat kMinImageScale = 1.0f;
     [controller addChildViewController:self];
     [self didMoveToParentViewController:controller];
 }
-
-
 
 - (void) dealloc {
     _rootViewController = nil;
