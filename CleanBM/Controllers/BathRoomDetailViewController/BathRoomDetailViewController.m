@@ -79,6 +79,7 @@
     mArrayUloadPhoto = [[NSMutableArray alloc]init];
     
     isPhotoUplaoding = NO;
+    
 }
 
 - (void)didReceiveMemoryWarning {

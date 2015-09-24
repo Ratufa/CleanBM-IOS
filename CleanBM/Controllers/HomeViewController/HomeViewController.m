@@ -55,7 +55,6 @@
     _mapView.showsUserLocation = YES;
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -75,18 +74,13 @@
         [self addMarkersOnMapWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"latitude"] doubleValue] andLongitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"longitude"] doubleValue]];
         
         [self getAllBathRoomsWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"latitude"] doubleValue] andLongitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"longitude"] doubleValue]];
-        
     }else{
-        
-        //[self actionSearchLocation];
-        
         [self addMarkersOnMapWithLatitude:_latitude andLongitude:_longitude];
         
         [self getAllBathRoomsWithLatitude:_latitude andLongitude:_longitude];
     }
     
     //Google Ads
-    
     _adBannerView.adUnitID = @"ca-app-pub-6582923366746091/1460886964";
     _adBannerView.rootViewController = self;
     _adBannerView.delegate = self;
@@ -95,7 +89,6 @@
     
     request.testDevices = @[strId];
     [_adBannerView loadRequest:request];
-    
 }
 
 #pragma mark -- GET RESTAURANT'S
@@ -119,7 +112,6 @@
             for (NSMutableDictionary *mDictRestaurantDetail in arrayRestaurant) {
                 
                 BOOL isLocationAvailable = NO;
-                
                 
                 for (id object in mArrayHolder) {
                     
@@ -299,7 +291,6 @@
                                                                  
                                                                  [self performSelector:@selector(actionHomePage:) withObject:nil afterDelay:0.3];
                                                              }];
-    
     
     REMenuItem *searchNearMeItem = [[REMenuItem alloc] initWithTitle:@"Search Near Me"
                                                             subtitle:@""
@@ -556,7 +547,6 @@
                 
                 [_mapView addAnnotation:ann];
                 
-                
                 if(i == 0 ){
                     
                     MKCoordinateRegion mapRegion;
@@ -567,7 +557,6 @@
                     MKCoordinateRegion region = {annotationCoord, mapRegion.span};
                     [_mapView setRegion:region animated:YES];
                 }
-                
             }
         }else{
             if([[error userInfo][@"error"] isEqualToString:@"The Internet connection appears to be offline."]){
@@ -655,7 +644,6 @@
 }
 
 -(IBAction)actionHomePage:(id)sender{
-    //[self.navigationController popViewControllerAnimated:YES];
     
     NSArray *viewControllers = [self.navigationController viewControllers];
     
@@ -666,7 +654,6 @@
             [self.navigationController popToViewController:viewController animated:YES];
         }
     }
-
 }
 
 -(IBAction)actionMyAccount:(id)sender{
@@ -752,7 +739,6 @@
     if ([custAnnotation.title isEqualToString:@"Current Location"]) {
         return;
     }
-    
     //view.image = [UIImage imageNamed:@"map_marker_icon"];
     
     if ([custAnnotation.locationType isEqualToString:@"bathRoom"]) {

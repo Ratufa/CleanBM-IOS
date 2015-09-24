@@ -311,7 +311,7 @@
             bathtoomDetail[@"bathRating"] = [NSNumber numberWithFloat:bathroomRating];
             bathtoomDetail[@"description"] = _txtViewMessage.text;
             bathtoomDetail[@"bathRoomType"] = strBathRoomType;
-            bathtoomDetail[@"approve"]= @"NO";
+            bathtoomDetail[@"approve"]= @"YES";
             bathtoomDetail[@"bathFullAddress"] = _txtLocationName.text;
             
             PFGeoPoint *point = [PFGeoPoint geoPointWithLatitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"AddLocationLatitude"] doubleValue] longitude:[[[NSUserDefaults standardUserDefaults]valueForKey:@"AddLocationLongitude"] doubleValue]];
@@ -342,7 +342,7 @@
                                 [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:[bathtoomDetail objectId]withIndex:0 withBathDetail:bathtoomDetail];
                             }else{
                                 //BathRoom Added without Image
-                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Thank you for your Submission" message:@"Your location has been added and awaiting approval from the CleanBM Team.  You will receive a notification once it is approved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Thank you for your Submission" message:@"Your location has been added successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                 alert.tag = 123;
                                 [alert show];
                                 [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
@@ -707,23 +707,21 @@
                             bathtoomImage[@"userInfo"] = currentUser;
                             bathtoomImage[@"userId"] = userId;
                             bathtoomImage[@"bathroomID"] = bathroomId;
-                            bathtoomImage[@"approve"]= @"NO";
-                            
+                            bathtoomImage[@"approve"]= @"YES";
+                            bathtoomImage[@"bathInfo"]= bathInfo;
+
                             [bathtoomImage saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                 if(succeeded){
                                     
-                                    if(blockInteger < [mArrayUloadPhoto count]-1)
-                                    {
+                                    if(blockInteger < [mArrayUloadPhoto count]-1){
                                         blockInteger++;
                                         [self uploadImagesOnServerWithUserId:userId andBathRoomID:bathroomId withIndex:blockInteger withBathDetail:bathInfo];
-                                    }
-                                    else{
+                                    }else{
                                         if(_requestFor == 1){
-                                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Thank you for your Submission" message:@"Your location has been added and awaiting approval from the CleanBM Team.  You will receive a notification once it is approved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Thank you for your Submission" message:@"Your location has been added successfully." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                             alert.tag = 123;
                                             [alert show];
-                                        }
-                                        else{
+                                        }else{
                                             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Your Review submitted successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                             alert.tag = 999;
                                             [alert show];
@@ -736,8 +734,7 @@
                                     [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
                                 }
                             }];
-                        }
-                        else{
+                        }else{
                             [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
                         }
                     } progressBlock:^(int percentDone) {
@@ -763,7 +760,6 @@
                       failureBlock:failureblock];
 }
 
-
 #pragma mark-- BATHROOM BASED ON (MALE/FEMALE/BOTH)
 -(IBAction)actionBathroomBasedFor:(id)sender{
     
@@ -784,17 +780,14 @@
                 _imgFeMale.image = [UIImage imageNamed:@"radio_button"];
                 _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"unsel_radio_button"];
                 strBathRoomBasedOn = @"Female";
-                
             }
                 break;
             case 333:{
                 //Male and Female Both
-                
                 _imgMale.image = [UIImage imageNamed:@"unsel_radio_button"];
                 _imgFeMale.image = [UIImage imageNamed:@"unsel_radio_button"];
                 _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"radio_button"];
                 strBathRoomBasedOn = @"Both";
-                
             }
                 break;
                 
@@ -803,7 +796,6 @@
         }
     }
 }
-
 
 #pragma MENU BUTTON
 -(IBAction)actionMenuButton:(id)sender{
