@@ -472,12 +472,12 @@
             
             AppDelegate *appDelegate = [AppDelegate getInstance];
             
-            if([appDelegate.strRequestFor isEqualToString:@"NearMe"]){
-                [self getRestaurantsWithLocationName:[[NSUserDefaults standardUserDefaults]valueForKey:@"userCity"]];
-            }
-            else{
-                [self getRestaurantsWithLocationName:_strSearchLocation];
-            }
+//            if([appDelegate.strRequestFor isEqualToString:@"NearMe"]){
+//                [self getRestaurantsWithLocationName:[[NSUserDefaults standardUserDefaults]valueForKey:@"userCity"]];
+//            }
+//            else{
+//                [self getRestaurantsWithLocationName:_strSearchLocation];
+//            }
         }else{
             if([[error userInfo][@"error"] isEqualToString:@"The Internet connection appears to be offline."]){
                 _txtSearchLocation.placeholder = @"Unable to reach our servers";
@@ -675,6 +675,7 @@
     static NSString* AnnotationIdentifier = @"AnnotationIdentifier";
     MKAnnotationView *annotationView = [_mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationIdentifier];
     
+    
     Annotation *localAnnotation = (Annotation *)annotation;
     
     if (annotationView == nil){
@@ -697,11 +698,10 @@
     annotationView.rightCalloutAccessoryView = rightButton;
     annotationView.rightCalloutAccessoryView.hidden = NO;
     annotationView.canShowCallout = YES;
-    annotationView.draggable = YES;
+    annotationView.draggable = NO;
     
     return annotationView;
 }
-
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
     
@@ -732,15 +732,18 @@
 }
 
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+    
     Annotation *custAnnotation = view.annotation;
     
     if ([custAnnotation.title isEqualToString:@"Current Location"]) {
         return;
     }
-    //view.image = [UIImage imageNamed:@"map_marker_icon"];
     
+    //view.image = [UIImage imageNamed:@"map_marker_icon"];
+    view.draggable = NO;
     if ([custAnnotation.locationType isEqualToString:@"bathRoom"]) {
         view.image = [UIImage imageNamed:@"map_marker_icon"];
+        
     }else if([custAnnotation.locationType isEqualToString:@"restaurant"]){
         view.image = [UIImage imageNamed:@"restaurent_location_icon"];
     }
@@ -750,6 +753,7 @@
 }
 
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{
+    
     Annotation *custAnnotation = view.annotation;
     
     if ([custAnnotation.title isEqualToString:@"Current Location"]) {
@@ -765,6 +769,7 @@
         view.image = [UIImage imageNamed:@"blue_hotel_icon"];
     }
 }
+
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
