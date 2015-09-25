@@ -422,6 +422,10 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Please Check your internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+        
     }];
 
     _tableViewLocations.hidden = YES;
@@ -489,6 +493,9 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Please Check your internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
     }];
 }
 
@@ -541,6 +548,9 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Error: %@", error);
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Please Check your internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [alert show];
+        
     }];
     
 }
@@ -651,10 +661,17 @@
         [self.pastSearchWords addObject:self.substring];
         NSLog(@"Search: %lu",(unsigned long)self.pastSearchResults.count);
         [self retrieveGooglePlaceInformation:self.substring withCompletion:^(NSArray * results) {
-            [self.localSearchQueries addObjectsFromArray:results];
-            NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
-            [self.pastSearchResults addObject:searchResult];
-            [_tableViewLocations reloadData];
+            
+            if([[results objectAtIndex:0] isKindOfClass:[NSString class]]){
+                _tableViewLocations.hidden = YES;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Please Check your internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }else{
+                [self.localSearchQueries addObjectsFromArray:results];
+                NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
+                [self.pastSearchResults addObject:searchResult];
+                [_tableViewLocations reloadData];
+            }
             
         }];
         
@@ -708,7 +725,6 @@
         
         [task resume];
     }
-    
 }
 
 -(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete {

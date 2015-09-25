@@ -267,6 +267,10 @@
         } else {
             // Log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);
+            
+            [[[UIAlertView alloc] initWithTitle:@"CleanBM" message:[error userInfo][@"error"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil]show];
+            [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+
         }
     }];
 }
@@ -336,11 +340,12 @@
         } else {
             // Log details of the failure
             NSLog(@"Error: %@ %@", error, [error userInfo]);
+            [[[UIAlertView alloc] initWithTitle:@"CleanBM" message:[error userInfo][@"error"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil]show];
+            [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
         }
         [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
     }];
 }
-
 
 -(NSMutableArray *)sortingArrayByUpdatedDate:(NSMutableArray *)sortArray
 {

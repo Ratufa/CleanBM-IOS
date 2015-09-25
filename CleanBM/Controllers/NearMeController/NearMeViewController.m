@@ -301,15 +301,20 @@ NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
         [self.pastSearchWords addObject:self.substring];
         NSLog(@"Search: %lu",(unsigned long)self.pastSearchResults.count);
         [self retrieveGooglePlaceInformation:self.substring withCompletion:^(NSArray * results) {
-            [self.localSearchQueries addObjectsFromArray:results];
-            NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
-            [self.pastSearchResults addObject:searchResult];
-            [_tableViewLocation reloadData];
             
+            if([[results objectAtIndex:0] isKindOfClass:[NSString class]]){
+                _tableViewLocation.hidden = YES;
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Please Check your internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+            }else{
+                [self.localSearchQueries addObjectsFromArray:results];
+                NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
+                [self.pastSearchResults addObject:searchResult];
+                [_tableViewLocation reloadData];
+            }
+
         }];
-        
     }else {
-        
         for (NSDictionary *pastResult in self.pastSearchResults) {
             if([[pastResult objectForKey:@"keyword"] isEqualToString:self.substring]){
                 [self.localSearchQueries addObjectsFromArray:[pastResult objectForKey:@"results"]];
@@ -318,7 +323,6 @@ NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
         }
     }
 }
-
 
 #pragma mark - Google API Requests
 

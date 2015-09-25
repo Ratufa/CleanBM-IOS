@@ -91,10 +91,8 @@
         [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
         strBathRoomType = @"Squat";
         
-        
         if([_strRequestFor isEqualToString:@"addLocation"])
         {
-            
             if([[[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"] isEqualToString:@""]){
                 _txtLocationName.text = @"";
                 _txtLocationName.userInteractionEnabled = YES;
@@ -111,8 +109,6 @@
             [[NSUserDefaults standardUserDefaults]setValue:bathroomGeoLocation[@"lat"] forKey:@"AddLocationLatitude"];
             [[NSUserDefaults standardUserDefaults]setValue:bathroomGeoLocation[@"lng"] forKey:@"AddLocationLongitude"];
         }
-        
-        
         _imgMale.image = [UIImage imageNamed:@"radio_button"];
         _imgFeMale.image = [UIImage imageNamed:@"unsel_radio_button"];
         _imgMaleFeMaleBoth.image = [UIImage imageNamed:@"unsel_radio_button"];
@@ -176,8 +172,6 @@
                         [_btnSit setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
                         strBathRoomType = @"Sit";
                     }
-                    
-                    
                     _txtViewMessage.text = pfObject[@"MessageReview"];
                 }
             }

@@ -99,7 +99,7 @@
     // upeepz key = AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+%@&key=AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=restaurants+in+%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"JSON: %@", responseObject);
         
         if([responseObject isKindOfClass:[NSDictionary class]]){
@@ -190,7 +190,7 @@
     // upeepz key = AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw
     
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotel+in+%@&key=AIzaSyCuTCpdsXmh8pmVjXfis0Ta-dBBwHnwPIw",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [manager GET:[NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/textsearch/json?query=hotel+in+%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",locationName] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSLog(@"JSON: %@", responseObject);
         
@@ -472,12 +472,12 @@
             
             AppDelegate *appDelegate = [AppDelegate getInstance];
             
-//            if([appDelegate.strRequestFor isEqualToString:@"NearMe"]){
-//                [self getRestaurantsWithLocationName:[[NSUserDefaults standardUserDefaults]valueForKey:@"userCity"]];
-//            }
-//            else{
-//                [self getRestaurantsWithLocationName:_strSearchLocation];
-//            }
+            if([appDelegate.strRequestFor isEqualToString:@"NearMe"]){
+                [self getRestaurantsWithLocationName:[[NSUserDefaults standardUserDefaults]valueForKey:@"userCity"]];
+            }
+            else{
+                [self getRestaurantsWithLocationName:_strSearchLocation];
+            }
         }else{
             if([[error userInfo][@"error"] isEqualToString:@"The Internet connection appears to be offline."]){
                 _txtSearchLocation.placeholder = @"Unable to reach our servers";

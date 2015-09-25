@@ -387,6 +387,13 @@
     
     NSData *jsonResponse = [NSData dataWithContentsOfURL:[NSURL URLWithString:lookUpString]];
     
+    if(jsonResponse == nil){
+        
+        NSArray *aaray = [[NSArray alloc] init];
+        
+        return aaray;
+    }
+    
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonResponse options:kNilOptions error:&error];
     
     // NSLog(@"%@",jsonDict);
