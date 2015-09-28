@@ -662,21 +662,23 @@
         NSLog(@"Search: %lu",(unsigned long)self.pastSearchResults.count);
         [self retrieveGooglePlaceInformation:self.substring withCompletion:^(NSArray * results) {
             
-            if([[results objectAtIndex:0] isKindOfClass:[NSString class]]){
-                _tableViewLocations.hidden = YES;
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Please Check your internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                [alert show];
+            if(results.count > 0){
+                if([[results objectAtIndex:0] isKindOfClass:[NSString class]]){
+                    _tableViewLocations.hidden = YES;
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Please Check your internet connection." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [alert show];
+                }else{
+                    [self.localSearchQueries addObjectsFromArray:results];
+                    NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
+                    [self.pastSearchResults addObject:searchResult];
+                    [_tableViewLocations reloadData];
+                }
             }else{
-                [self.localSearchQueries addObjectsFromArray:results];
-                NSDictionary *searchResult = @{@"keyword":self.substring,@"results":results};
-                [self.pastSearchResults addObject:searchResult];
-                [_tableViewLocations reloadData];
+                _tableViewLocations.hidden = YES;
             }
             
         }];
-        
     }else {
-        
         for (NSDictionary *pastResult in self.pastSearchResults) {
             if([[pastResult objectForKey:@"keyword"] isEqualToString:self.substring]){
                 [self.localSearchQueries addObjectsFromArray:[pastResult objectForKey:@"results"]];
@@ -684,12 +686,9 @@
             }
         }
     }
-    
 }
 
-
 #pragma mark - Google API Requests
-
 -(void)retrieveGooglePlaceInformation:(NSString *)searchWord withCompletion:(void (^)(NSArray *))complete{
     NSString *searchWordProtection = [searchWord stringByReplacingOccurrencesOfString:@" " withString:@""];
     

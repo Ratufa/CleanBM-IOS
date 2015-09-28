@@ -32,6 +32,7 @@
     NSString *strBathRoomBasedOn;
     
     PFObject *reviewObject;
+    
     BOOL isGivenRating;
 }
 
@@ -65,14 +66,6 @@
     _collectionViewUploadImages.hidden = YES;
     mArrayUloadPhoto = [[NSMutableArray alloc] init];
 
-    
-    [self configureMenuView];
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
     _ratingView.delegate = self;
     _ratingView.emptySelectedImage = [UIImage imageNamed:@"unselected_rating"];
     _ratingView.fullSelectedImage = [UIImage imageNamed:@"selected_rating"];
@@ -84,8 +77,17 @@
     _ratingView.halfRatings = NO;
     _ratingView.floatRatings = YES;
     
-    if(_requestFor == 1){
-        
+    [self configureMenuView];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    //requestFor 1 for add new bathroom and 2 for Review and rating
+    
+       if(_requestFor == 1){
+        _txtLocationName.userInteractionEnabled = YES;
         //Squat Bathroom
         [_btnSquat setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
         [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
@@ -139,6 +141,8 @@
         
         _txtLocationName.text = _bathRoomDetail[@"bathFullAddress"];
         
+        _txtLocationName.userInteractionEnabled = NO;
+        
         if([_bathRoomDetail[@"bathRoomType"] isEqualToString:@"Squat"]){
             //Squat Bathroom
             [_btnSquat setBackgroundImage:[UIImage imageNamed:@"selected_squat_sit"] forState:UIControlStateNormal];
@@ -160,6 +164,8 @@
                     isGivenRating = YES;
                     
                     _ratingView.rating = [pfObject[@"bathRating"]floatValue];
+                    
+                    bathroomRating = [pfObject[@"bathRating"]floatValue];
                     
                     if([pfObject[@"bathRoomType"] isEqualToString:@"Squat"]){
                         //Squat Bathroom
@@ -188,11 +194,9 @@
     return UIStatusBarStyleLightContent;
 }
 
-
 -(IBAction)actionBack:(id)sender{
     [self.navigationController popViewControllerAnimated:YES];
 }
-
 
 #pragma mark RatingView delegate
 - (void)floatRatingView:(TPFloatRatingView *)ratingView ratingDidChange:(CGFloat)rating

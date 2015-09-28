@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464878496.277913"
+            timestampString = "465122078.206731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "286"
-            endingLineNumber = "286"
+            startingLineNumber = "291"
+            endingLineNumber = "291"
             landmarkName = "-actionAddLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -74,44 +74,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464878496.277913"
+            timestampString = "465122078.206731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "444"
-            endingLineNumber = "444"
+            startingLineNumber = "449"
+            endingLineNumber = "449"
             landmarkName = "-actionAddLocation:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464878496.277913"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "628"
-            endingLineNumber = "628"
-            landmarkName = "-handleLongPress:"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464878496.277913"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "640"
-            endingLineNumber = "640"
-            landmarkName = "-handleLongPress:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -361,7 +329,7 @@
                   symbolName = "__87-[BathRoomDetailViewController uploadImagesOnServerWithUserId:andBathRoomID:withIndex:]_block_invoke_2"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-                  timestampString = "464880617.886589"
+                  timestampString = "465117397.065078"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "885"
@@ -375,7 +343,7 @@
                   symbolName = "__87-[BathRoomDetailViewController uploadImagesOnServerWithUserId:andBathRoomID:withIndex:]_block_invoke_2"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/BathRoomDetailViewController/BathRoomDetailViewController.m"
-                  timestampString = "464880617.886882"
+                  timestampString = "465117397.065334"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "885"
@@ -503,7 +471,7 @@
                   symbolName = "__30-[ViewController actionLogin:]_block_invoke"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/SigninSignUpViewController/ViewController.m"
-                  timestampString = "464880617.901053"
+                  timestampString = "465117397.143982"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "129"
@@ -517,7 +485,7 @@
                   symbolName = "__30-[ViewController actionLogin:]_block_invoke_2"
                   moduleName = "CleanBM"
                   urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/SigninSignUpViewController/ViewController.m"
-                  timestampString = "464880617.901313"
+                  timestampString = "465117397.144213"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "129"
@@ -566,11 +534,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddLoacationViewController.m"
-            timestampString = "464876483.840804"
+            timestampString = "465109419.018111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "437"
-            endingLineNumber = "437"
+            startingLineNumber = "435"
+            endingLineNumber = "435"
             landmarkName = "-getLocationFromAddressString:"
             landmarkType = "5">
          </BreakpointContent>
@@ -710,11 +678,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464878496.277913"
+            timestampString = "465122078.206731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "512"
-            endingLineNumber = "512"
+            startingLineNumber = "517"
+            endingLineNumber = "517"
             landmarkName = "-alertView:clickedButtonAtIndex:"
             landmarkType = "5">
          </BreakpointContent>
@@ -742,11 +710,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464877565.531193"
+            timestampString = "465109217.429162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "496"
-            endingLineNumber = "496"
+            startingLineNumber = "500"
+            endingLineNumber = "500"
             landmarkName = "-actionLoginSignUp:"
             landmarkType = "5">
          </BreakpointContent>
@@ -806,13 +774,57 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464877565.531193"
+            timestampString = "465109217.429162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "424"
-            endingLineNumber = "424"
+            startingLineNumber = "428"
+            endingLineNumber = "428"
             landmarkName = "-actionLookUpLocation:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__45-[NearMeViewController actionLookUpLocation:]_block_invoke"
+                  moduleName = "CleanBM"
+                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/NearMeController/NearMeViewController.m"
+                  timestampString = "465117397.18138"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "429"
+                  endingLineNumber = "429"
+                  offsetFromSymbolStart = "901">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__45-[NearMeViewController actionLookUpLocation:]_block_invoke"
+                  moduleName = "CleanBM"
+                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/NearMeController/NearMeViewController.m"
+                  timestampString = "465117397.181938"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "429"
+                  endingLineNumber = "429"
+                  offsetFromSymbolStart = "945">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__45-[NearMeViewController actionLookUpLocation:]_block_invoke405"
+                  moduleName = "CleanBM"
+                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/NearMeController/NearMeViewController.m"
+                  timestampString = "465117397.182166"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "429"
+                  endingLineNumber = "429"
+                  offsetFromSymbolStart = "74">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -822,11 +834,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464877565.531193"
+            timestampString = "465109217.429162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "418"
-            endingLineNumber = "418"
+            startingLineNumber = "422"
+            endingLineNumber = "422"
             landmarkName = "-actionLookUpLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -854,11 +866,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464696180.598416"
+            timestampString = "465122078.206731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
             landmarkName = "-viewWillAppear:"
             landmarkType = "5">
          </BreakpointContent>
@@ -870,11 +882,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464878496.277913"
+            timestampString = "465122078.206731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "276"
-            endingLineNumber = "276"
+            startingLineNumber = "281"
+            endingLineNumber = "281"
             landmarkName = "-actionAddLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -902,11 +914,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
-            timestampString = "464878496.277913"
+            timestampString = "465122078.206731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "299"
-            endingLineNumber = "299"
+            startingLineNumber = "304"
+            endingLineNumber = "304"
             landmarkName = "-actionAddLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -966,11 +978,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddLoacationViewController.m"
-            timestampString = "464876328.224596"
+            timestampString = "465109419.018111"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "384"
-            endingLineNumber = "384"
+            startingLineNumber = "382"
+            endingLineNumber = "382"
             landmarkName = "-getAddressFromLatLon:withLongitude:"
             landmarkType = "5">
          </BreakpointContent>
@@ -998,13 +1010,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464877565.531193"
+            timestampString = "465109217.429162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "344"
-            endingLineNumber = "344"
+            startingLineNumber = "348"
+            endingLineNumber = "348"
             landmarkName = "-retrieveGooglePlaceInformation:withCompletion:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[NearMeViewController retrieveGooglePlaceInformation:withCompletion:]"
+                  moduleName = "CleanBM"
+                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/NearMeController/NearMeViewController.m"
+                  timestampString = "465117397.231674"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "348"
+                  endingLineNumber = "348"
+                  offsetFromSymbolStart = "981">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__70-[NearMeViewController retrieveGooglePlaceInformation:withCompletion:]_block_invoke"
+                  moduleName = "CleanBM"
+                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/NearMeController/NearMeViewController.m"
+                  timestampString = "465117397.232129"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "348"
+                  endingLineNumber = "348"
+                  offsetFromSymbolStart = "150">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1014,11 +1056,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464877565.531193"
+            timestampString = "465109217.429162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "318"
-            endingLineNumber = "318"
+            startingLineNumber = "322"
+            endingLineNumber = "322"
             landmarkName = "-searchAutocompleteLocationsWithSubstring:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1030,13 +1072,43 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464877565.531193"
+            timestampString = "465109217.429162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "373"
-            endingLineNumber = "373"
+            startingLineNumber = "377"
+            endingLineNumber = "377"
             landmarkName = "-retrieveJSONDetailsAbout:withCompletion:"
             landmarkType = "5">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[NearMeViewController retrieveJSONDetailsAbout:withCompletion:]"
+                  moduleName = "CleanBM"
+                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/NearMeController/NearMeViewController.m"
+                  timestampString = "465117397.244126"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "377"
+                  endingLineNumber = "377"
+                  offsetFromSymbolStart = "482">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "__64-[NearMeViewController retrieveJSONDetailsAbout:withCompletion:]_block_invoke"
+                  moduleName = "CleanBM"
+                  urlString = "file:///Users/developer/Documents/YogendraSolankiGit/CleanBM-IOS/CleanBM/Controllers/NearMeController/NearMeViewController.m"
+                  timestampString = "465117397.244578"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "377"
+                  endingLineNumber = "377"
+                  offsetFromSymbolStart = "150">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1046,11 +1118,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464877565.531193"
+            timestampString = "465109217.429162"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "411"
-            endingLineNumber = "411"
+            startingLineNumber = "415"
+            endingLineNumber = "415"
             landmarkName = "-actionLookUpLocation:"
             landmarkType = "5">
          </BreakpointContent>
@@ -1158,12 +1230,44 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "CleanBM/Controllers/NearMeController/NearMeViewController.m"
-            timestampString = "464880610.051398"
+            timestampString = "465109144.535524"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "304"
-            endingLineNumber = "304"
+            startingLineNumber = "305"
+            endingLineNumber = "305"
             landmarkName = "-searchAutocompleteLocationsWithSubstring:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
+            timestampString = "465122078.206731"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
+            landmarkName = "-viewWillAppear:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CleanBM/Controllers/AddNewLocationVIewController/AddNewLocationViewController.m"
+            timestampString = "465122078.206731"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "283"
+            endingLineNumber = "283"
+            landmarkName = "-actionAddLocation:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

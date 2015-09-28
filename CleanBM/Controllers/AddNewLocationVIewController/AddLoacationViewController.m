@@ -373,12 +373,9 @@
         [[NSUserDefaults standardUserDefaults] setValue:strAddress forKey:@"NewLocationFullAddress"];
         [[NSUserDefaults standardUserDefaults]synchronize];
     }
-
 }
 
-
--(NSArray *)getAddressFromLatLon:(double)pdblLatitude withLongitude:(double)pdblLongitude
-{
+-(NSArray *)getAddressFromLatLon:(double)pdblLatitude withLongitude:(double)pdblLongitude{
     NSError *error = nil;
     
     NSString *lookUpString  = [NSString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?latlng=%f,%f&amp;sensor=false", pdblLatitude,pdblLongitude];
@@ -390,17 +387,12 @@
     if(jsonResponse == nil){
         
         NSArray *aaray = [[NSArray alloc] init];
-        
         return aaray;
     }
     
     NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:jsonResponse options:kNilOptions error:&error];
     
-    // NSLog(@"%@",jsonDict);
-    
     NSArray* jsonResults = [jsonDict objectForKey:@"results"];
-    
-    // NSLog(@"%@",jsonResults);
     
     return jsonResults;
 }
