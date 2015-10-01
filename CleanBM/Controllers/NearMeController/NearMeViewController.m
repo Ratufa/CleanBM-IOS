@@ -19,6 +19,7 @@
 #import "SupportViewController.h"
 #import "MyAccountViewController.h"
 #import "AFNetworking.h"
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 
 @interface NearMeViewController ()<UITextFieldDelegate,REMenuDelegate,UITableViewDataSource,UITableViewDelegate>
@@ -181,7 +182,9 @@ NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
     
     PFUser *currentUser = [PFUser currentUser];
     
-    if (currentUser) {
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]){
         // do stuff with the user
         
         logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
@@ -315,6 +318,10 @@ NSString *const apiKey = @"AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE";
                 }
             }else{
                 _tableViewLocation.hidden = YES;
+                
+                UIAlertView *alert = [[UIAlertView  alloc]initWithTitle:@"CleanBM" message:@"Unable to find this location.Please modified your location." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
+                
             }
             
         }];

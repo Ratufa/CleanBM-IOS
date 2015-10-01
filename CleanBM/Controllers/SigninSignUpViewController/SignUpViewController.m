@@ -78,7 +78,7 @@
     }
     if(![_txtpassword.text isEqualToString:_txtConfirmPassword.text])
     {
-        [StringUtilityClass ShowAlertMessageWithHeader:@"Alert" Message:@"Your password and confirm password do not match please try again."];
+        [StringUtilityClass ShowAlertMessageWithHeader:@"Alert" Message:@"These passwords don't match. Try again?"];
         return;
     }
     

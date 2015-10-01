@@ -12,6 +12,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "StringUtilityClass.h"
+#import "CleanBMLoader.h"
 
 
 @interface MyAccountViewController ()<UIAlertViewDelegate>
@@ -56,14 +57,14 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 - (IBAction)actionBack:(id)sender {
     
@@ -94,7 +95,13 @@
         //Putting data
         currentUser[@"name"] = _txtName.text;
         
+        [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
+        
+        
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+            
             if(succeeded){
                 //profile updated success fully
                 
@@ -139,8 +146,12 @@
         currentUser.username = _txtEmailAddress.text;
         currentUser.password = _txtPassword.text;
         currentUser.email = _txtEmailAddress.text;
+        [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
         
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+            
+            [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
+            
             if(succeeded){
                 //profile updated success fully
                 
@@ -174,32 +185,30 @@
         }
             break;
         case 222:{
-            
             if (buttonIndex == 0) {
                 
-            
-            PFUser *currentUser = [PFUser currentUser];
-            
-            //Putting data
-            currentUser[@"userProfile"] = @"premium";
-            
-            [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if(succeeded){
-                    //profile updated success fully
+                PFUser *currentUser = [PFUser currentUser];
+                //Putting data
+                currentUser[@"userProfile"] = @"premium";
+                
+                [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
+                
+                [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                    [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
                     
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Profile Updated successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    alert.tag = 111;
-                    [alert show];
-                    
-                }else{
-                    //Error
-                    NSString *strError = [error userInfo][@"error"];
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:strError delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    if(succeeded){
+                        //profile updated success fully
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"Profile Updated successfully!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                        alert.tag = 111;
                         [alert show];
-                }
-            }];
-                }
-            
+                    }else{
+                        //Error
+                        NSString *strError = [error userInfo][@"error"];
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM😀" message:strError delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                        [alert show];
+                    }
+                }];
+            }
         }
             break;
         default:

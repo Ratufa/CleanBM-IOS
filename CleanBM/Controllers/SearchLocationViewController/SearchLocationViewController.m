@@ -18,6 +18,8 @@
 #import "MyAccountViewController.h"
 #import "SupportViewController.h"
 #import "AppDelegate.h"
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+
 
 @interface SearchLocationViewController ()<UITableViewDataSource,UITableViewDelegate,MKMapViewDelegate,UITextFieldDelegate,REMenuDelegate,UIAlertViewDelegate>
 {
@@ -56,7 +58,7 @@
     self.pastSearchResults = [NSMutableArray array];
     
     [self configureMenuView];
-
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -72,7 +74,7 @@
 #pragma MENU BUTTON
 -(IBAction)actionMenuButton:(id)sender{
     [self menuButton];
-
+    
 }
 
 - (void) menuButton{
@@ -117,7 +119,7 @@
                                                                 action:^(REMenuItem *item) {
                                                                     NSLog(@"Item: %@", item);
                                                                     
-//                                                                    [self performSelector:@selector(actionSearchNearMe:) withObject:nil afterDelay:0.3];
+                                                                    //                                                                    [self performSelector:@selector(actionSearchNearMe:) withObject:nil afterDelay:0.3];
                                                                 }];
     REMenuItem *addNewLocationItem = [[REMenuItem alloc] initWithTitle:@"Add New Location"
                                                                  image:[UIImage imageNamed:@"add_bathroom_icon"]
@@ -160,9 +162,10 @@
     
     PFUser *currentUser = [PFUser currentUser];
     
-    if (currentUser) {
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]){
         // do stuff with the user
-        
         logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
                                               subtitle:@""
                                                  image:[UIImage imageNamed:@"sing_out_button"]
@@ -427,7 +430,7 @@
         [alert show];
         
     }];
-
+    
     _tableViewLocations.hidden = YES;
     
     mArraybathRooms = [[NSMutableArray alloc]init];
@@ -487,7 +490,7 @@
             }
             
             //get Hotel's
-           
+            
             [self getHotelsWithLocationName:locationName];
         }
         
@@ -675,8 +678,9 @@
                 }
             }else{
                 _tableViewLocations.hidden = YES;
+                UIAlertView *alert = [[UIAlertView  alloc]initWithTitle:@"CleanBM" message:@"Unable to find this location.Please modified your location." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [alert show];
             }
-            
         }];
     }else {
         for (NSDictionary *pastResult in self.pastSearchResults) {
@@ -721,12 +725,12 @@
                 complete(results);
             }
         }];
-        
         [task resume];
     }
 }
 
 -(void)retrieveJSONDetailsAbout:(NSString *)place withCompletion:(void (^)(NSArray *))complete {
+    
     NSString *urlString = [NSString stringWithFormat:@"https://maps.googleapis.com/maps/api/place/details/json?placeid=%@&key=AIzaSyCJWHBdeonUF9Gafppf6Ag23NRiUhuuzoE",place];
     NSURL *url = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]];
     NSURLSessionConfiguration *defaultConfigObject = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -749,7 +753,6 @@
             complete(results);
         }
     }];
-    
     [task resume];
 }
 
@@ -758,7 +761,7 @@
 {
     if (searchTextString.length != 0) {
         searchArray = [NSMutableArray array];
-       
+        
         AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
         [manager GET:[NSString stringWithFormat:@"http://maps.googleapis.com/maps/api/geocode/json?address=%@&sensor=false",searchTextString] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSLog(@"JSON: %@", responseObject);
@@ -776,7 +779,6 @@
         }];
     }
 }
-
 
 #pragma mark-- UIAlertView Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
@@ -796,7 +798,5 @@
             break;
     }
 }
-
-
 
 @end

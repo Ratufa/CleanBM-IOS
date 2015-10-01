@@ -273,8 +273,8 @@
     MKCoordinateRegion mapRegion;
     mapRegion.center.latitude = latitude;
     mapRegion.center.longitude = longitude;
-    mapRegion.span.latitudeDelta = 0.05;
-    mapRegion.span.longitudeDelta = 0.05;
+    mapRegion.span.latitudeDelta = 0.1;
+    mapRegion.span.longitudeDelta = 0.1;
     MKCoordinateRegion region = {annotationCoord, mapRegion.span};
     [_mapView setRegion:region animated:YES];
 }
@@ -288,7 +288,6 @@
                                                    highlightedImage:nil
                                                              action:^(REMenuItem *item) {
                                                                  NSLog(@"Item: %@", item);
-                                                                 
                                                                  [self performSelector:@selector(actionHomePage:) withObject:nil afterDelay:0.3];
                                                              }];
     
@@ -309,7 +308,6 @@
                                                       highlightedImage:nil
                                                                 action:^(REMenuItem *item) {
                                                                     NSLog(@"Item: %@", item);
-                                                                    
                                                                     [self performSelector:@selector(actionSearchNearMe:) withObject:nil afterDelay:0.3];
                                                                 }];
     REMenuItem *addNewLocationItem = [[REMenuItem alloc] initWithTitle:@"Add New Location"
@@ -350,31 +348,33 @@
                                                               [self performSelector:@selector(actionMyAccount:) withObject:nil afterDelay:0.3];
                                                           }];
     
-    
     PFUser *currentUser = [PFUser currentUser];
     
-    if (currentUser) {
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]) {
         // do stuff with the user
-        
-        logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
-                                              subtitle:@""
-                                                 image:[UIImage imageNamed:@"sing_out_button"]
-                                      highlightedImage:nil
-                                                action:^(REMenuItem *item) {
-                                                    NSLog(@"Item: %@", item);
-                                                    
-                                                    [self performSelector:@selector(actionLogout:) withObject:nil afterDelay:0.1];
-                                                }];
-        
-        loginSignUpItem.tag = 0;
-        searchNearMeItem.tag = 1;
-        searchLocationItem.tag = 2;
-        addNewLocationItem.tag = 3;
-        supportItem.tag = 4;
-        logoutItem.tag = 6;
-        myAccountItem.tag = 5;
-        
-        _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,myAccountItem ,logoutItem]];
+        if ([[currentUser objectForKey:@"emailVerified"] boolValue]){
+            logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
+                                                  subtitle:@""
+                                                     image:[UIImage imageNamed:@"sing_out_button"]
+                                          highlightedImage:nil
+                                                    action:^(REMenuItem *item) {
+                                                        NSLog(@"Item: %@", item);
+                                                        
+                                                        [self performSelector:@selector(actionLogout:) withObject:nil afterDelay:0.1];
+                                                    }];
+            
+            loginSignUpItem.tag = 0;
+            searchNearMeItem.tag = 1;
+            searchLocationItem.tag = 2;
+            addNewLocationItem.tag = 3;
+            supportItem.tag = 4;
+            logoutItem.tag = 6;
+            myAccountItem.tag = 5;
+            
+            _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,myAccountItem ,logoutItem]];
+        }
         
     }else{
         loginSignUpItem.tag = 0;
@@ -397,6 +397,7 @@
     self.menu.separatorOffset = CGSizeMake(15.0, 0.0);
     self.menu.imageOffset = CGSizeMake(5, -1);
     self.menu.waitUntilAnimationIsComplete = NO;
+    
     self.menu.badgeLabelConfigurationBlock = ^(UILabel *badgeLabel, REMenuItem *item) {
         badgeLabel.backgroundColor = [UIColor colorWithRed:0 green:179/255.0 blue:134/255.0 alpha:1];
         badgeLabel.layer.borderColor = [UIColor colorWithRed:0.000 green:0.648 blue:0.507 alpha:1.000].CGColor;
@@ -705,8 +706,36 @@
 
 -(void)mapView:(MKMapView *)mapView regionDidChangeAnimated:(BOOL)animated{
     
+    CLLocationCoordinate2D location = mapView.centerCoordinate;
+    
+    MKZoomScale currentZoomScale = mapView.bounds.size.width / mapView.visibleMapRect.size.width;
+    MKMapRect mRect = self.mapView.visibleMapRect;
+    
+    MKMapPoint eastMapPoint = MKMapPointMake(MKMapRectGetMinX(mRect), MKMapRectGetMidY(mRect));
+    MKMapPoint westMapPoint = MKMapPointMake(MKMapRectGetMaxX(mRect), MKMapRectGetMidY(mRect));
+    
+    CLLocationCoordinate2D centre = [self.mapView centerCoordinate];
+    
+    NSLog(@"Center Latitude =%f Ceter Longitude = %f",centre.latitude,centre.longitude);
+    
+    int temp_miles =  MetersToMiles1(MKMetersBetweenMapPoints(eastMapPoint, westMapPoint));
+    
+    
+    float tempKilemoters = [self metersToKiloMeter:(MKMetersBetweenMapPoints(eastMapPoint, westMapPoint))];
+
+    NSLog(@"😀 Latitude =%f 😀Longitude =%f 😀currentZoomScale= %f 😀Miles =%d 😀KiloMeters =%f",location.latitude,location.longitude ,currentZoomScale,temp_miles,tempKilemoters);
+    
+}
+#pragma mark -- METERS TO MILES
+float MetersToMiles1(float meters){
+    return meters / 1609.344f;
 }
 
+#pragma mark -- METERS TO KILOMETERS
+-(float)metersToKiloMeter:(float)meters{
+    
+    return meters/1000;
+}
 -(IBAction)eventDetail:(id)sender{
     
     if([sender tag] != 111){
@@ -734,7 +763,6 @@
 -(void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
     
     Annotation *custAnnotation = view.annotation;
-    
     if ([custAnnotation.title isEqualToString:@"Current Location"]) {
         return;
     }
@@ -759,7 +787,6 @@
     if ([custAnnotation.title isEqualToString:@"Current Location"]) {
         return;
     }
-    
     if ([custAnnotation.locationType isEqualToString:@"bathRoom"]) {
         view.image = [UIImage imageNamed:@"small_cleanbm_location_icon"];
     }else if([custAnnotation.locationType isEqualToString:@"restaurant"]){

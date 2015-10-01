@@ -71,10 +71,12 @@
     
     PFUser *currentUser = [PFUser currentUser];
     
-    if (currentUser) {
-        // do stuff with the user
-        NearMeViewController *nearMeViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"nearMeViewController"];
-        [self.navigationController pushViewController:nearMeViewController animated:YES];
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]){
+            // do stuff with the user
+            NearMeViewController *nearMeViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil]instantiateViewControllerWithIdentifier:@"nearMeViewController"];
+            [self.navigationController pushViewController:nearMeViewController animated:YES];
     }
 }
 
@@ -83,7 +85,6 @@
     // Dispose of any resources that can be recreated.
 }
 
-
 -(void)viewWillAppear:(BOOL)animated{
     
     [super viewWillAppear:animated];
@@ -91,6 +92,7 @@
     _txtEmailAddress.text = @"";
     _txtPasswod.text = @"";
 }
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
@@ -106,7 +108,6 @@
         [StringUtilityClass ShowAlertMessageWithHeader:@"Alert" Message:@"Please enter Valid Email Address."];
         return;
     }
-
     if ([StringUtilityClass Trim:_txtPasswod.text].length == 0){
         [StringUtilityClass ShowAlertMessageWithHeader:@"Alert" Message:@"Please enter Password."];
         return;
@@ -121,7 +122,9 @@
     [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
     
     PFQuery *query = [PFUser query];
+    
     [query whereKey:@"email" equalTo:_txtEmailAddress.text];
+    
     [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error){
         if (objects.count > 0) {
             PFObject *object = [objects objectAtIndex:0];
@@ -150,28 +153,23 @@
                         // Show the errorString somewhere and let the user try again.
                         [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
                     }
-                    
                 }
             }];
         }else{
-            
             [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
 
             [[[UIAlertView alloc]initWithTitle:@"Error" message:@"The email and password you entered don't match." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
         }
-        
     }];
 }
 
 - (IBAction)actionFacebookLogin:(id)sender {
     
     [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
-    
     [PFFacebookUtils logInInBackgroundWithReadPermissions: @[ @"user_about_me", @"user_relationships", @"user_birthday", @"user_location",@"email", @"public_profile"] block:^(PFUser *user, NSError *error) {
         if (!user) {
             NSLog(@"Uh oh. The user cancelled the Facebook login.");
             [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
-            
         } else if (user.isNew) {
             NSLog(@"User signed up and logged in through Facebook!");
             [self _loadDataWithPFUser:user];
@@ -272,13 +270,24 @@
                         return;
                     }
                     
-                    //[PFUser requestPasswordResetForEmailInBackground:[alertView textFieldAtIndex:0].text];
+                    [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
+
                     [PFUser requestPasswordResetForEmailInBackground:[alertView textFieldAtIndex:0].text block:^(BOOL succeeded, NSError *error) {
                         NSLog(@"Request for Password Reset");
+                        
+                        [CleanBMLoader showLoader:self.navigationController withShowHideOption:NO];
+
                         if(!succeeded){
                             //Error
                             NSString *errorString = [error userInfo][@"error"];   // Show the errorString somewhere and let the user try again.
                             [[[UIAlertView alloc]initWithTitle:@"Error" message:errorString delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
+                        }else{
+                            
+                            //Please follow the instructions we sent to yogendra.solanki@ratufa.com
+                            NSString *strMessage = [NSString stringWithFormat:@"Please follow the instructions we sent to %@.",[alertView textFieldAtIndex:0].text];
+                            
+                            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:strMessage delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                            [alert show];
                         }
                     }];
                 }

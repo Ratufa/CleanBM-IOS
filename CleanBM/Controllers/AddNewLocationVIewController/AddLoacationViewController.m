@@ -17,6 +17,7 @@
 #import "MyAccountViewController.h"
 #import "AppDelegate.h"
 #import "SupportViewController.h"
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 @interface AddLoacationViewController ()<MKMapViewDelegate,REMenuDelegate,UIAlertViewDelegate>{
     
@@ -151,29 +152,30 @@
     
     
     PFUser *currentUser = [PFUser currentUser];
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
     
-    if (currentUser) {
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]){
         // do stuff with the user
+            logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
+                                                  subtitle:@""
+                                                     image:[UIImage imageNamed:@"sing_out_button"]
+                                          highlightedImage:nil
+                                                    action:^(REMenuItem *item) {
+                                                        NSLog(@"Item: %@", item);
+                                                        
+                                                        [self performSelector:@selector(actionLogout:) withObject:nil afterDelay:0.1];
+                                                    }];
+            
+            loginSignUpItem.tag = 0;
+            searchNearMeItem.tag = 1;
+            searchLocationItem.tag = 2;
+            addNewLocationItem.tag = 3;
+            supportItem.tag = 4;
+            logoutItem.tag = 6;
+            myAccountItem.tag = 5;
+            
+            _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,myAccountItem ,logoutItem]];
         
-        logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"
-                                              subtitle:@""
-                                                 image:[UIImage imageNamed:@"sing_out_button"]
-                                      highlightedImage:nil
-                                                action:^(REMenuItem *item) {
-                                                    NSLog(@"Item: %@", item);
-                                                    
-                                                    [self performSelector:@selector(actionLogout:) withObject:nil afterDelay:0.1];
-                                                }];
-        
-        loginSignUpItem.tag = 0;
-        searchNearMeItem.tag = 1;
-        searchLocationItem.tag = 2;
-        addNewLocationItem.tag = 3;
-        supportItem.tag = 4;
-        logoutItem.tag = 6;
-        myAccountItem.tag = 5;
-        
-        _menu = [[REMenu alloc] initWithItems:@[loginSignUpItem, searchNearMeItem, searchLocationItem, addNewLocationItem,supportItem,myAccountItem ,logoutItem]];
         
     }else{
         loginSignUpItem.tag = 0;
@@ -218,7 +220,6 @@
     
     BOOL isHomeAvailabel = NO;
 
-    
     for (UIViewController *viewController in viewControllers) {
         
         if([viewController isKindOfClass:[HomeViewController class]])

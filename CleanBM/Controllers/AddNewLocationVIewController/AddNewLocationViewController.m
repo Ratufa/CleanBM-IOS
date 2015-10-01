@@ -20,6 +20,7 @@
 #import "SearchLocationViewController.h"
 #import "MyAccountViewController.h"
 #import "SupportViewController.h"
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 
 @interface AddNewLocationViewController ()<TPFloatRatingViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UIActionSheetDelegate,UIAlertViewDelegate,UzysAssetsPickerControllerDelegate,UIGestureRecognizerDelegate,REMenuDelegate>
@@ -32,10 +33,8 @@
     NSString *strBathRoomBasedOn;
     
     PFObject *reviewObject;
-    
     BOOL isGivenRating;
 }
-
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectionViewUploadImages;
 
@@ -48,7 +47,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btnSit;
 @property (weak, nonatomic) IBOutlet UIButton *btnCamera;
-
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgMale;
 @property (weak, nonatomic) IBOutlet UIImageView *imgFeMale;
@@ -93,8 +91,7 @@
         [_btnSit setBackgroundImage:[UIImage imageNamed:@"unselected_squat_sit"] forState:UIControlStateNormal];
         strBathRoomType = @"Squat";
         
-        if([_strRequestFor isEqualToString:@"addLocation"])
-        {
+        if([_strRequestFor isEqualToString:@"addLocation"]){
             if([[[NSUserDefaults standardUserDefaults]valueForKey:@"NewLocationFullAddress"] isEqualToString:@""]){
                 _txtLocationName.text = @"";
                 _txtLocationName.userInteractionEnabled = YES;
@@ -157,7 +154,7 @@
 
         for (PFObject *pfObject in _mArrayReviewsList) {
             
-            if(currentUser){
+            if([[currentUser objectForKey:@"emailVerified"] boolValue]){
                 if([currentUser.objectId isEqualToString:pfObject[@"userId"]] && [_strBathRoomId isEqualToString:pfObject[@"bathRoomID"]]){
                     reviewObject = pfObject;
                     
@@ -293,7 +290,9 @@
     }
     
     PFUser *currentUser = [PFUser currentUser];
-    if (currentUser) {
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]){
         // do stuff with the user
         
         if(_requestFor == 1){
@@ -882,8 +881,9 @@
     
     
     PFUser *currentUser = [PFUser currentUser];
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
     
-    if (currentUser) {
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]){
         // do stuff with the user
         
         logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"

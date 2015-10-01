@@ -28,6 +28,7 @@
 #import "MyAccountViewController.h"
 #import "SupportViewController.h"
 #import "AddLoacationViewController.h"
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 
 @interface BathRoomDetailViewController ()<UITableViewDataSource,UITableViewDelegate,TPFloatRatingViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,MKMapViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate,UICollectionViewDelegateFlowLayout,UzysAssetsPickerControllerDelegate,REMenuDelegate>
@@ -193,19 +194,16 @@
 - (IBAction)actionGiveRating:(id)sender {
     
     PFUser *currentUser = [PFUser currentUser];
-    if (currentUser) {
-//        RatingViewController *ratingViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ratingViewController"];
-//        ratingViewController.strBathRoomId = _bathRoomDetail.objectId;
-//        ratingViewController.bathRoomDetail = _bathRoomDetail;
-//        ratingViewController.mArrayReviewsList = mArrayBathRoomReviews;
-//        [self.navigationController pushViewController:ratingViewController animated:YES];
+    
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]) {
         
-        AddNewLocationViewController *addNewLocationViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"addNewLocationViewController"];
-        addNewLocationViewController.requestFor = 2;
-        addNewLocationViewController.mArrayReviewsList = mArrayBathRoomReviews;
-        addNewLocationViewController.strBathRoomId = _bathRoomDetail.objectId;
-        addNewLocationViewController.bathRoomDetail = _bathRoomDetail;
-        [self.navigationController pushViewController:addNewLocationViewController animated:YES];
+        RatingViewController *ratingViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"ratingViewController"];
+        ratingViewController.strBathRoomId = _bathRoomDetail.objectId;
+        ratingViewController.bathRoomDetail = _bathRoomDetail;
+        ratingViewController.mArrayReviewsList = mArrayBathRoomReviews;
+        [self.navigationController pushViewController:ratingViewController animated:YES];
         
     }else {
         // show the signup or login screen
@@ -493,7 +491,9 @@
                                         PFObject *objectReview = [mArrayBathRoomReviews objectAtIndex:indexPath.row];
 
                                         PFUser *currentUser = [PFUser currentUser];
-                                        if (currentUser) {
+                                        BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+                                        
+                                        if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]){
                                             // do stuff with the user
                                             
                                             PFQuery *query = [PFQuery queryWithClassName:@"LikeReview"];
@@ -698,7 +698,9 @@
                 
                 PFUser *currentUser = [PFUser currentUser];
                 
-                if (currentUser) {
+                BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+                
+                if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]) {
                     // do stuff with the user
                     
                     if([currentUser.objectId isEqualToString:objectReview[@"userId"]]){
@@ -1062,7 +1064,9 @@
     
     PFUser *currentUser = [PFUser currentUser];
     
-    if (currentUser) {
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]) {
         // do stuff with the user
         
         logoutItem = [[REMenuItem alloc] initWithTitle:@"Log Out"

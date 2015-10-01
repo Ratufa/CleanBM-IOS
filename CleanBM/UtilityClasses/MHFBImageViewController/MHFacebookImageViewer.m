@@ -30,6 +30,7 @@
 #import "AppDelegate.h"
 #import "StringUtilityClass.h"
 #import "CleanBMLoader.h"
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 
 
 static const CGFloat kMinBlackMaskAlpha = 0.3f;
@@ -494,7 +495,9 @@ static const CGFloat kMinImageScale = 1.0f;
     
     PFUser *currentUser = [PFUser currentUser];
     
-    if (currentUser) {
+    BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+    
+    if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]) {
         // do stuff with the user
         
         if([currentUser.objectId isEqualToString:objectReview[@"userId"]]){
