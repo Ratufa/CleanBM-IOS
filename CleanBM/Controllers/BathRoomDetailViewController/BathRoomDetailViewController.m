@@ -316,9 +316,7 @@
             tempArray = [self sortingArray:tempArray];
             
             for (PFObject *object in tempArray) {
-                
                 if (![mArrayBathRoomReviews containsObject:object]) {
-                    // ...
                     [mArrayBathRoomReviews addObject:object];
                 }
             }
@@ -358,23 +356,17 @@
     return [[NSMutableArray alloc] initWithArray:sortedArray];
 }
 
-
--(NSMutableArray *)sortingArray:(NSMutableArray *)sortArray
-{
-    NSSortDescriptor *sortDescriptor;
-    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"likeCount"
+-(NSMutableArray *)sortingArray:(NSMutableArray *)sortArray{
+    
+    NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"likeCount"
                                                  ascending:NO];
     
     NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
     NSArray *sortedArray;
     sortedArray = [sortArray sortedArrayUsingDescriptors:sortDescriptors];
     
-    // _arrayOrderStatus = [[dictResponse valueForKey:@"order_array"] mutableCopy];
-    
     return [[NSMutableArray alloc] initWithArray:sortedArray];
 }
-
-
 
 #pragma mark - MKMapView Delegate.
 - (MKAnnotationView *)mapView:(MKMapView *)theMapView viewForAnnotation:(id <MKAnnotation>)annotation
@@ -510,19 +502,32 @@
                                             [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                                                 NSLog(@"Data =%@",objects);
                                                 
-                                                for (int i = 0; i < [objects count]; i++) {
-                                                    
-                                                    PFObject *objectData = [objects objectAtIndex:i];
-                                                    
-                                                    if ([objectData[@"likeUser"] isEqualToString:currentUser.objectId] && [objectData[@"reviewId"] isEqualToString:objectReview.objectId]) {
-                                                        
-                                                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have already like." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                                        [alert show];
-                                                        ;
-                                                        return ;
-                                                    }
-                                                    
+                                                
+                                                
+                                                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(likeUser == %@) AND reviewId == %@",currentUser.objectId,objectReview.objectId];
+                                                
+                                                NSArray *filterdArray = [objects filteredArrayUsingPredicate:predicate];
+                                                
+                                                if(filterdArray.count > 0){
+                                                    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have already like." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                                                    [alert show];
+                                                    return ;
                                                 }
+
+                                                
+//                                                for (int i = 0; i < [objects count]; i++) {
+//                                                    
+//                                                    PFObject *objectData = [objects objectAtIndex:i];
+//                                                    
+//                                                    if ([objectData[@"likeUser"] isEqualToString:currentUser.objectId] && [objectData[@"reviewId"] isEqualToString:objectReview.objectId]) {
+//                                                        
+//                                                        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have already like." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//                                                        [alert show];
+//                                                        ;
+//                                                        return ;
+//                                                    }
+//                                                    
+//                                                }
                                                
                                                 if(error == nil){
                                                     
@@ -572,6 +577,7 @@
                                             return;
                                         }
                                     }];
+    
     button.backgroundColor = [UIColor redColor]; //arbitrary color
     
     UITableViewRowAction *button2 = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:@"Report" handler:^(UITableViewRowAction *action, NSIndexPath *indexPath)
@@ -586,7 +592,6 @@
     
     return @[button, button2]; //array with all the buttons you want. 1,2,3, etc...
 }
-
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     // you need to implement this method too or nothing will work:
@@ -706,7 +711,6 @@
                     if([currentUser.objectId isEqualToString:objectReview[@"userId"]]){
                         
                         [StringUtilityClass ShowAlertMessageWithHeader:@"CleanBM" Message:@"You can not report yourself!"];
-                        
                         return;
                     }
                     
@@ -723,21 +727,31 @@
                     [mainQuery findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
                         NSLog(@"Data =%@",objects);
                         
-                        for (int i = 0; i < [objects count]; i++) {
-                            
-                            PFObject *objectData = [objects objectAtIndex:i];
-                            
-                            if ([objectData[@"reportedUser"] isEqualToString:currentUser.objectId] && [objectData[@"reviewId"] isEqualToString:objectReview.objectId]) {
-                                
-                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have reported." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                                [alert show];
-                                ;
-                                return ;
-                            }
+                        
+                        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(reportedUser == %@) AND reviewId == %@",currentUser.objectId,objectReview.objectId];
+                        
+                        NSArray *filterdArray = [objects filteredArrayUsingPredicate:predicate];
+                        
+                        if(filterdArray.count > 0){
+                            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have reported." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                            [alert show];
+                            return ;
                         }
                         
+//                        for (int i = 0; i < [objects count]; i++) {
+//                            
+//                            PFObject *objectData = [objects objectAtIndex:i];
+//                            
+//                            if ([objectData[@"reportedUser"] isEqualToString:currentUser.objectId] && [objectData[@"reviewId"] isEqualToString:objectReview.objectId]) {
+//                                
+//                                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have reported." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//                                [alert show];
+//                                ;
+//                                return ;
+//                            }
+//                        }
+                        
                         if(error == nil){
-                            
                             PFObject* bathtoomRating = [PFObject objectWithClassName:@"ReportReview"];
                             
                             bathtoomRating[@"reportedUser"] = currentUser.objectId;//who login user
@@ -745,24 +759,19 @@
                             bathtoomRating[@"reportCount"] = [NSNumber numberWithInt:1];
                             bathtoomRating[@"reviewUserId"] = objectReview[@"userId"];
                             bathtoomRating[@"bathroomId"] = [_bathRoomDetail objectId];
-                            
                             bathtoomRating[@"bathInfo"] = _bathRoomDetail;
                             bathtoomRating[@"reportedUserInfo"] = currentUser;
                             bathtoomRating[@"reviewInfo"] = objectReview;
 
-                            
                             [bathtoomRating saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
                                 
                                 if(succeeded){
                                     UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"You have successfully reported Inappropriate content." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                                     //alert.tag = 555;
                                     [alert show];
-                                    
                                     NSNumber *incrementedNumber = [NSNumber numberWithInt:1];
-                                    
                                     [objectReview incrementKey:@"reportCount" byAmount:incrementedNumber];
                                     [objectReview saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                                        //[self getReviewList];
                                     }];
                                     
                                 }else{
@@ -776,7 +785,6 @@
                             [[[UIAlertView alloc] initWithTitle:@"CleanBM" message:[error userInfo][@"error"]  delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil, nil] show];
                         }
                     }];
-                    
                 } else {
                     // show the signup or login screen
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"CleanBM" message:@"You are not LoggedIn!" delegate:self cancelButtonTitle:@"Login" otherButtonTitles:@"Cancel", nil];
@@ -794,7 +802,6 @@
                 
                 AppDelegate *appDelegate = [AppDelegate getInstance];
                 appDelegate.strRootOrLogin = @"LoginViewController";
-                
                 [self.navigationController pushViewController:viewController animated:YES];
             }
         }
@@ -805,7 +812,6 @@
                 isPhotoUplaoding = YES;
                 PFUser *currentUser = [PFUser currentUser];
                 [CleanBMLoader showLoader:self.navigationController withShowHideOption:YES];
-                
                 [self uploadImagesOnServerWithUserId:currentUser.objectId andBathRoomID:_bathRoomDetail.objectId withIndex:0];
             }
         }
@@ -819,6 +825,26 @@
                     }
                 }];
             }
+        }
+            break;
+        case 200:{
+            //Whole Bathroom Report as inappropreate
+            
+//            PFUser *currentUser = [PFUser currentUser];
+//            
+//            BOOL linkedWithFacebook = [PFFacebookUtils isLinkedWithUser:currentUser];
+//            
+//            if(linkedWithFacebook || [[currentUser objectForKey:@"emailVerified"] boolValue]) {
+//                // do stuff with the user
+//                
+//                if([currentUser.objectId isEqualToString:objectReview[@"userId"]]){
+//                    
+//                    [StringUtilityClass ShowAlertMessageWithHeader:@"CleanBM" Message:@"You can not report yourself!"];
+//                    return;
+//                }
+//            }
+
+            
         }
             break;
         default:
@@ -1215,6 +1241,7 @@
     }
 }
 
+
 #pragma mark - REMenu Delegate Methods
 -(void)willOpenMenu:(REMenu *)menu{
     NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
@@ -1230,6 +1257,13 @@
 
 -(void)didCloseMenu:(REMenu *)menu{
     NSLog(@"Delegate method: %@", NSStringFromSelector(_cmd));
+}
+
+#pragma mark-- BATHROOM REPORT
+-(IBAction)actionBathRoomReport:(id)sender{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"CleanBM" message:@"Report this bathroom as inappropriate?" delegate:self cancelButtonTitle:@"Yes" otherButtonTitles:@"No", nil];
+    alert.tag = 200;
+    [alert show];
 }
 
 @end

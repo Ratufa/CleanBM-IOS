@@ -2116,17 +2116,46 @@
                                                     <action selector="actionGiveRating:" destination="KAX-Ie-2zN" eventType="touchUpInside" id="xCl-Uy-lnh"/>
                                                 </connections>
                                             </button>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ntj-9j-edO">
+                                                <rect key="frame" x="229" y="91" width="48" height="1"/>
+                                                <color key="backgroundColor" red="0.95686274510000002" green="0.1176470588" blue="0.17254901959999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" constant="1" id="DaY-Al-n6b"/>
+                                                    <constraint firstAttribute="width" constant="48" id="EL2-C2-SNn"/>
+                                                </constraints>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" red="0.95686274510000002" green="0.1176470588" blue="0.17254901959999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J9g-Vx-HUj">
+                                                <rect key="frame" x="229" y="68" width="48" height="26"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="48" id="1eb-fV-21B"/>
+                                                    <constraint firstAttribute="height" constant="26" id="QyU-fg-VY8"/>
+                                                </constraints>
+                                                <state key="normal" title="Report">
+                                                    <color key="titleColor" red="0.95686274510000002" green="0.1176470588" blue="0.17254901959999999" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="actionBathRoomReport:" destination="KAX-Ie-2zN" eventType="touchUpInside" id="cv6-L8-QV8"/>
+                                                </connections>
+                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="J9g-Vx-HUj" secondAttribute="trailing" constant="43" id="2jF-eU-CNf"/>
                                             <constraint firstItem="7FT-o2-FoH" firstAttribute="leading" secondItem="5HS-Zi-nk2" secondAttribute="leading" constant="15" id="5Sg-rz-B9P"/>
                                             <constraint firstItem="n24-zl-yjO" firstAttribute="leading" secondItem="5HS-Zi-nk2" secondAttribute="leading" constant="15" id="9ly-OP-Gl4"/>
                                             <constraint firstAttribute="bottom" secondItem="X1Y-Oz-KOt" secondAttribute="bottom" constant="7" id="D78-ky-ePe"/>
                                             <constraint firstItem="sn2-0v-Bx3" firstAttribute="top" secondItem="n24-zl-yjO" secondAttribute="bottom" constant="3" id="F9V-4M-oQZ"/>
                                             <constraint firstAttribute="trailing" secondItem="n24-zl-yjO" secondAttribute="trailing" constant="15" id="MhG-d7-Nar"/>
                                             <constraint firstItem="n24-zl-yjO" firstAttribute="top" secondItem="5HS-Zi-nk2" secondAttribute="top" constant="9" id="OhY-MN-n46"/>
+                                            <constraint firstAttribute="trailing" secondItem="ntj-9j-edO" secondAttribute="trailing" constant="43" id="TYI-sq-XLP"/>
+                                            <constraint firstItem="ntj-9j-edO" firstAttribute="top" secondItem="sn2-0v-Bx3" secondAttribute="bottom" constant="25" id="a7R-wJ-PVp"/>
                                             <constraint firstItem="X1Y-Oz-KOt" firstAttribute="leading" secondItem="5HS-Zi-nk2" secondAttribute="leading" constant="15" id="eiD-dJ-oRS"/>
                                             <constraint firstItem="7FT-o2-FoH" firstAttribute="top" secondItem="n24-zl-yjO" secondAttribute="bottom" constant="8" id="g42-gK-raY"/>
+                                            <constraint firstItem="J9g-Vx-HUj" firstAttribute="top" secondItem="sn2-0v-Bx3" secondAttribute="bottom" constant="2" id="g4O-ys-bg5"/>
                                             <constraint firstAttribute="centerX" secondItem="n24-zl-yjO" secondAttribute="centerX" id="gBW-ci-ld1"/>
                                             <constraint firstAttribute="trailing" secondItem="sn2-0v-Bx3" secondAttribute="trailing" constant="7" id="kFg-LR-du9"/>
                                             <constraint firstAttribute="height" constant="95" id="wmE-PU-E2f"/>
